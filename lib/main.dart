@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       home: Title(),
         debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
-        "/w":(BuildContext context) => new WordsListList(),
+        "/w":(BuildContext context) => new WordsListRoot(),
       },
     );
   }
