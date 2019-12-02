@@ -12,7 +12,6 @@ class _WordsListAddState extends State<WordsListAdd>{
   final TextEditingController tagController = new TextEditingController();
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -323,7 +322,6 @@ class _WordsDetailDetailState extends State<WordsDetailDetail>{
   var correctPer;
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     Words word = HoldData.word;
     if (word.missCount+ word.correct == 0){
       correctPer = 0;
@@ -361,7 +359,6 @@ class _WordsAddState extends State<WordsAdd>{
   final TextEditingController tagController = new TextEditingController();
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         appBar: AppBar(),
         body: Scaffold(

@@ -3,7 +3,6 @@ import 'dart:core';
 import 'package:bentsuyo_app/tools/data.dart';
 import 'package:flutter/material.dart';
 import '../tools/tool.dart';
-import '../tools/types.dart';
 import 'parts/words_parts.dart';
 
 class WordsListRoot extends StatelessWidget{
