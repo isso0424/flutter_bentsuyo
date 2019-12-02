@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'tool.dart';
+import '../tools/tool.dart';
 import 'words.dart';
 
 void main(){
