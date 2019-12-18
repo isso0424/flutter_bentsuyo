@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../tools/tool.dart';
 import 'words.dart';
+import 'package:flutter/services.dart';
 
 void main(){
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
 }
 class MyApp extends StatelessWidget {

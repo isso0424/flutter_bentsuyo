@@ -124,6 +124,7 @@ class _WordsListListState extends State<WordsListList>{
           ),
             onTap: (){
               HoldData.loadWordsList(index);
+              HoldData.wordsListIndex = index;
               Navigator.push(context, new MaterialPageRoute<Null>(
                   builder: (BuildContext context) => WordsListViewRoot(index:index,)));
             },
@@ -142,6 +143,7 @@ class _WordsListTitleState extends State<WordsListTitle>{
   var word;
   @override
   Widget build(BuildContext context) {
+    print(HoldData.wordsListIndex);
     word = HoldData.wordsListList[HoldData.wordsListIndex].title;
     return toLeft(Text(word,
       style: TextStyle(fontSize: 40),));
