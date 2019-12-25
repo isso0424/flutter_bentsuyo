@@ -1,9 +1,9 @@
 class Words{
   final String word;
   final String mean;
-  final int missCount;
-  final int correct;
-  final bool memorized;
+  int missCount;
+  int correct;
+  bool memorized;
   Words(this.word, this.mean, this.missCount, this.correct, this.memorized);
   Words.fromJson(Map<String, dynamic> json)
       : word = json['word'],

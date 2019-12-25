@@ -41,7 +41,6 @@ class _WordsListAddState extends State<WordsListAdd>{
               onPressed: () {
                 String title = titleController.text;
                 String tag = tagController.text;
-                print(title);
                 if (title == "" || tag == ""){
                   return;
                 }
@@ -76,6 +75,18 @@ class _WordsListListState extends State<WordsListList>{
     saveData("json", """
     [{"title":"単語帳", "tag":"たぐ", "words":[{"word":"たんご", "mean": "意味", "missCount":0,"correct":0,"memorized":false}]}]
     """);*/
+    var a = '''
+    [
+      {"title":"単語帳",
+        "tag": "たぐ",
+        "words":[
+          {"word":"たんご", "mean": "意味", "missCount":0,"correct":0,"memorized":0}
+        ]
+      }
+    ]
+    ''';
+
+    var jsonArray = jsonDecode(a);
     return
       FutureBuilder(
         future: getData("wordsListList"),
@@ -97,7 +108,7 @@ class _WordsListListState extends State<WordsListList>{
     var j = pref.getString("json");
     var jsonArray = json.decode(j);
     /*
-    var a = [
+    var a = [[
       {"title":"単語帳",
         "tag": "たぐ",
         "words":[
@@ -143,7 +154,6 @@ class _WordsListTitleState extends State<WordsListTitle>{
   var word;
   @override
   Widget build(BuildContext context) {
-    print(HoldData.wordsListIndex);
     word = HoldData.wordsListList[HoldData.wordsListIndex].title;
     return toLeft(Text(word,
       style: TextStyle(fontSize: 40),));
@@ -164,7 +174,6 @@ class _WordsListViewState extends State<WordsListView>{
   getWidth(context) => Tools.getWidth(context);
   @override
   Widget build(BuildContext context) {
-
     return Container(
       child: Column(children: <Widget>[
         SizedBox(child:Card(child: FutureBuilder(
@@ -205,7 +214,7 @@ class _WordsListViewState extends State<WordsListView>{
     HoldData.wordsList = words[HoldData.wordsListIndex];
     return ListView.builder(itemBuilder: (context, int index){
       if (index == HoldData.wordsList.words.length){
-        return GestureDetector(child:toLeft(Text(HoldData.wordsList.words[index]["word"])), onTap: (){
+        return GestureDetector(child:toLeft(Text(HoldData.wordsList.words[index].word)), onTap: (){
           HoldData.getWord(index);
           Navigator.push(context, new MaterialPageRoute(
               builder: (BuildContext context) => new DetailViewRoot()));
@@ -247,16 +256,19 @@ class _ForgetWordsListState extends State<ForgetWordsList>{
                 bool initial = true;
                 bool flag = true;
                 if (initial)for (var i in HoldData.wordsList.words){
-                  if(!i["memorized"]){
+                  if (i is Words){
+                    if(i.memorized) flag = false;
+                  }
+                  else if(!i["memorized"]){
                     flag = false;
                   }
                 }
                 initial = false;
                 if (index == 0 && flag){
                   return Text("ないです");
-                }else if(!HoldData.wordsList.words[index]["memorized"]){
+                }else if(!HoldData.wordsList.words[index].memorized){
                   return GestureDetector(child:
-                  Text(HoldData.wordsList.words[index]["word"]),
+                  Text(HoldData.wordsList.words[index].word),
                       onTap: () {
                         HoldData.getWord(index);
                         Navigator.push(context, new MaterialPageRoute(

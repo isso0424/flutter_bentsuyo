@@ -1,9 +1,11 @@
 import 'dart:core';
 
 import 'package:bentsuyo_app/tools/data.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../tools/tool.dart';
 import 'parts/words_parts.dart';
+import 'words_test.dart';
 
 class WordsListRoot extends StatelessWidget{
   @override
@@ -55,8 +57,10 @@ class WordsListViewRoot extends StatelessWidget{
           toLeft(Text("　単語一覧",
             style: TextStyle(fontSize: 30),)),
           WordsListView(),
+          TestButton(),
           toLeft(Text("　まだわかってない単語", style: TextStyle(fontSize: 30),)),
-          ForgetWordsList()
+          ForgetWordsList(),
+          TestButtonDontMemorized()
         ],
       ),
         floatingActionButton: FloatingActionButton(
@@ -105,3 +109,41 @@ class DetailViewRoot extends StatelessWidget{
   }
 }
 
+class TestButton extends StatefulWidget {
+  @override
+   _TestButtonState createState() => _TestButtonState();
+}
+
+class _TestButtonState extends State<TestButton>{
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return RaisedButton(
+      child: Text("テストする"),
+      onPressed: () => Navigator.push(context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => new WordsTestCore(HoldData.wordsListIndex, true)
+      ))
+    );
+  }
+}
+
+class TestButtonDontMemorized extends StatefulWidget{
+  @override
+  _TestButtonDontMemorizedState createState() => _TestButtonDontMemorizedState();
+}
+
+class _TestButtonDontMemorizedState extends State<TestButtonDontMemorized> {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return RaisedButton(
+      child: Text("テストする"),
+      onPressed: (){
+        Navigator.push(context, MaterialPageRoute(
+          builder: (BuildContext context) => new WordsTestCore(HoldData.wordsListIndex, false)
+        ));
+      },
+    );
+  }
+  }

@@ -28,14 +28,37 @@ class HoldData{
     saveWordsList();
   }
   static void loadWordsList(int index){
+    print("hey");
     wordsList = wordsListList[index];
+    print("hoy");
+    print(wordsList.words);
+    print(wordsList.words[0]["word"]);
   }
   static void getWord(int index){
     var cache = [];
-    for (String tag in tags){
-      cache.add(wordsList.words[index][tag]);
-    }
-    word =  Words(cache[0], cache[1], cache[2], cache[3], cache[4]);
+    var value = wordsList.words[index];
+    word = new Words(value["word"], value["mean"], value["missCount"], value["correct"], value["memorized"]);
     wordIndex = index;
+  }
+  static void _saveWordsListToListList(){
+    wordsListList[wordsListIndex] = wordsList;
+    saveWordsList();
+  }
+  static void afterAnswer(Words words, bool result){
+    print(words.toJson());
+    int correctedIndex = wordsList.words.indexOf(words);
+    int index = 0;
+    for (var baruxu in wordsList.words){
+      if (baruxu["word"] == words.word) break;
+      index++;
+    }
+    print("correct$index");
+    if (result) words.correct += 1;
+    else words.missCount += 1;
+    if (words.correct > words.missCount) words.memorized = true;
+    else words.memorized = false;
+    print(wordsList.words[0]);
+    wordsList.words[index] = words;
+    _saveWordsListToListList();
   }
 }
