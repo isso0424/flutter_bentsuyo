@@ -28,14 +28,11 @@ class HoldData{
     saveWordsList();
   }
   static void loadWordsList(int index){
-    print("hey");
     wordsList = wordsListList[index];
-    print("hoy");
     print(wordsList.words);
     print(wordsList.words[0]["word"]);
   }
   static void getWord(int index){
-    var cache = [];
     var value = wordsList.words[index];
     word = new Words(value["word"], value["mean"], value["missCount"], value["correct"], value["memorized"]);
     wordIndex = index;
@@ -45,11 +42,13 @@ class HoldData{
     saveWordsList();
   }
   static void afterAnswer(Words words, bool result){
-    print(words.toJson());
-    int correctedIndex = wordsList.words.indexOf(words);
     int index = 0;
     for (var baruxu in wordsList.words){
+      if (baruxu is Words) {
+        if (baruxu.word == words.word) break;
+      }else{
       if (baruxu["word"] == words.word) break;
+    }
       index++;
     }
     print("correct$index");

@@ -1,7 +1,6 @@
 import 'dart:core';
 
 import 'package:bentsuyo_app/tools/data.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../tools/tool.dart';
 import 'parts/words_parts.dart';

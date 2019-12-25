@@ -75,18 +75,6 @@ class _WordsListListState extends State<WordsListList>{
     saveData("json", """
     [{"title":"単語帳", "tag":"たぐ", "words":[{"word":"たんご", "mean": "意味", "missCount":0,"correct":0,"memorized":false}]}]
     """);*/
-    var a = '''
-    [
-      {"title":"単語帳",
-        "tag": "たぐ",
-        "words":[
-          {"word":"たんご", "mean": "意味", "missCount":0,"correct":0,"memorized":0}
-        ]
-      }
-    ]
-    ''';
-
-    var jsonArray = jsonDecode(a);
     return
       FutureBuilder(
         future: getData("wordsListList"),

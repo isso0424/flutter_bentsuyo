@@ -51,6 +51,7 @@ class _TestViewState extends State<TestView>{
   int _index;
   bool answeredFlag = false;
   int result;
+  int questions;
   bool rememberFlag = false;
   TestCore testCore;
   int answerCount = 0;
@@ -83,13 +84,17 @@ class _TestViewState extends State<TestView>{
             ),
             onPressed: () {
               answeredFlag = false;
+              if (result == 0)answerCount++;
+              else missCount++;
+              setState(() {
+              });
             },
           )
         ],
       );
     }
     else {
-      if (answeredFlag && result != 2){
+      if (!answeredFlag && result != 2){
         words = testCore.getWord();
         result = 2;
       }
@@ -145,6 +150,18 @@ class _TestViewState extends State<TestView>{
             )
           ],
         );
+      else return AlertDialog(
+          title: Text("テスト終了"),
+          content: Text("問題数 : ${answerCount + missCount}\n"
+                        "正解数 : $answerCount\n"
+                        "正答率 : ${answerCount * (answerCount + missCount) * 100}%"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Finish"),
+              onPressed: () => Navigator.pop(context),
+            )
+          ],
+        );
     }
   }
   @override
@@ -159,6 +176,7 @@ class _TestViewState extends State<TestView>{
   }
   // true == 0, false == 1, null == 2
 }
+
 
 
 class TestCore {
@@ -178,11 +196,10 @@ class TestCore {
       if (words.length == 0) words.add(Words("404", "you remember all words in words list", 0, 0, false));
     }
   }
-  static List<Words> words;
+  List<Words> words;
   Words getWord() {
     if (words.length == 0) return Words("0", "finish this test", 0, 0, false);
     int index = random.nextInt(words.length);
-    // TODO:: index make random int
     Words word = words[index];
     words.removeAt(index);
     return word;
