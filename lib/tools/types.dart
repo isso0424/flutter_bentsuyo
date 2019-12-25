@@ -1,4 +1,4 @@
-class Words{
+class Words {
   final String word;
   final String mean;
   int missCount;
@@ -11,29 +11,23 @@ class Words{
         missCount = json['missCount'],
         correct = json['correct'],
         memorized = json['memorized'];
-  Map<String, dynamic> toJson() =>
-      {
-        'word':word,
-        'mean':mean,
-        'missCount':missCount,
-        'correct':correct,
-        'memorized':memorized
+  Map<String, dynamic> toJson() => {
+        'word': word,
+        'mean': mean,
+        'missCount': missCount,
+        'correct': correct,
+        'memorized': memorized
       };
 }
 
-class WordsList{
+class WordsList {
   final String title;
   final String tag;
   final List<dynamic> words;
   WordsList(this.title, this.tag, this.words);
   WordsList.fromJson(Map<String, dynamic> json)
-      :title = json['title'],
-        tag= json['tag'],
+      : title = json['title'],
+        tag = json['tag'],
         words = json['words'];
-  Map<String, dynamic> toJson() =>
-      {
-        'title': title,
-        'tag':tag,
-        'words':words
-      };
+  Map<String, dynamic> toJson() => {'title': title, 'tag': tag, 'words': words};
 }

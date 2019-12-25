@@ -6,7 +6,7 @@ import '../tools/tool.dart';
 import 'parts/words_parts.dart';
 import 'words_test.dart';
 
-class WordsListRoot extends StatelessWidget{
+class WordsListRoot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,11 +18,14 @@ class WordsListRoot extends StatelessWidget{
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-              Text("単語帳リスト",style: TextStyle(fontSize: 30),),
-            Divider(),
-            Expanded(
-              child: WordsListList(),
-            )
+                Text(
+                  "単語帳リスト",
+                  style: TextStyle(fontSize: 30),
+                ),
+                Divider(),
+                Expanded(
+                  child: WordsListList(),
+                )
               ],
             ),
           )
@@ -30,10 +33,15 @@ class WordsListRoot extends StatelessWidget{
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
-        onPressed: (){
-          Navigator.push(context, new MaterialPageRoute(
-            builder: (BuildContext context) => new WordsListAdd()
-          ));
+        child: Text(
+          "+",
+          style: TextStyle(fontSize: 30),
+        ),
+        onPressed: () {
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (BuildContext context) => new WordsListAdd()));
         },
       ),
     );
@@ -41,41 +49,50 @@ class WordsListRoot extends StatelessWidget{
 }
 
 // ignore: must_be_immutable
-class WordsListViewRoot extends StatelessWidget{
+class WordsListViewRoot extends StatelessWidget {
   WordsListViewRoot({this.index});
   int index;
   toLeft(widget) => Tools.toLeft(widget);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: <Widget>[
-          WordsListTitle(),
-          Divider(),
-          toLeft(Text("　単語一覧",
-            style: TextStyle(fontSize: 30),)),
-          WordsListView(),
-          TestButton(),
-          toLeft(Text("　まだわかってない単語", style: TextStyle(fontSize: 30),)),
-          ForgetWordsList(),
-          TestButtonDontMemorized()
-        ],
-      ),
+        appBar: AppBar(),
+        body: Column(
+          children: <Widget>[
+            WordsListTitle(),
+            Divider(),
+            toLeft(Text(
+              "　単語一覧",
+              style: TextStyle(fontSize: 30),
+            )),
+            WordsListView(),
+            TestButton(),
+            toLeft(Text(
+              "　まだわかってない単語",
+              style: TextStyle(fontSize: 30),
+            )),
+            ForgetWordsList(),
+            TestButtonDontMemorized()
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
+          child: Text(
+            "+",
+            style: TextStyle(fontSize: 30),
+          ),
           backgroundColor: Colors.blue,
-          onPressed: (){
-            Navigator.push(context, new MaterialPageRoute(
-                builder: (BuildContext context) => new WordsAdd()
-            ));
+          onPressed: () {
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (BuildContext context) => new WordsAdd()));
           },
-        )
-    );
+        ));
   }
 }
 
 // ignore: must_be_immutable
-class DetailViewRoot extends StatelessWidget{
+class DetailViewRoot extends StatelessWidget {
   toLeft(widget) => Tools.toLeft(widget);
   @override
   Widget build(BuildContext context) {
@@ -102,7 +119,8 @@ class DetailViewRoot extends StatelessWidget{
               ),
             ],
           ),
-        padding: EdgeInsets.all(20.0),),
+          padding: EdgeInsets.all(20.0),
+        ),
       ),
     );
   }
@@ -110,25 +128,28 @@ class DetailViewRoot extends StatelessWidget{
 
 class TestButton extends StatefulWidget {
   @override
-   _TestButtonState createState() => _TestButtonState();
+  _TestButtonState createState() => _TestButtonState();
 }
 
-class _TestButtonState extends State<TestButton>{
+class _TestButtonState extends State<TestButton> {
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
-      child: Text("テストする"),
-      onPressed: () => Navigator.push(context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => new WordsTestCore(HoldData.wordsListIndex, true)
-      ))
-    );
+        child: Text("テストする"),
+        color: Colors.blue,
+        textColor: Colors.white,
+        onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    new WordsTestCore(HoldData.wordsListIndex, true))));
   }
 }
 
-class TestButtonDontMemorized extends StatefulWidget{
+class TestButtonDontMemorized extends StatefulWidget {
   @override
-  _TestButtonDontMemorizedState createState() => _TestButtonDontMemorizedState();
+  _TestButtonDontMemorizedState createState() =>
+      _TestButtonDontMemorizedState();
 }
 
 class _TestButtonDontMemorizedState extends State<TestButtonDontMemorized> {
@@ -136,11 +157,15 @@ class _TestButtonDontMemorizedState extends State<TestButtonDontMemorized> {
   Widget build(BuildContext context) {
     return RaisedButton(
       child: Text("テストする"),
-      onPressed: (){
-        Navigator.push(context, MaterialPageRoute(
-          builder: (BuildContext context) => new WordsTestCore(HoldData.wordsListIndex, false)
-        ));
+      color: Colors.blue,
+      textColor: Colors.white,
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    new WordsTestCore(HoldData.wordsListIndex, false)));
       },
     );
   }
-  }
+}

@@ -6,7 +6,7 @@ import 'dart:math' as math;
 
 // ignore: must_be_immutable
 class WordsTestCore extends StatelessWidget {
-  WordsTestCore(int index, bool rememberFlag){
+  WordsTestCore(int index, bool rememberFlag) {
     _index = index;
     this.rememberFlag = rememberFlag;
   }
@@ -15,19 +15,14 @@ class WordsTestCore extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Container(
-        child: TestView(_index, rememberFlag)
-      )
-    );
+        appBar: AppBar(),
+        body: Container(child: TestView(_index, rememberFlag)));
   }
 }
 
-
-
 // ignore: must_be_immutable
-class TestView extends StatefulWidget{
-  TestView(index, rememberFlag){
+class TestView extends StatefulWidget {
+  TestView(index, rememberFlag) {
     _index = index;
     this.rememberFlag = rememberFlag;
   }
@@ -37,14 +32,12 @@ class TestView extends StatefulWidget{
   _TestViewState createState() => _TestViewState(_index, rememberFlag);
 }
 
-
-
-class _TestViewState extends State<TestView>{
-  _TestViewState(int index, bool rememberFlag){
+class _TestViewState extends State<TestView> {
+  _TestViewState(int index, bool rememberFlag) {
     _index = index;
     this.rememberFlag = rememberFlag;
     HoldData.loadWordsList(_index);
-    testCore = TestCore(HoldData.wordsList, rememberFlag);
+    testCore = TestCore(HoldData.wordsList, this.rememberFlag);
     words = testCore.getWord();
     result = 2;
   }
@@ -61,85 +54,87 @@ class _TestViewState extends State<TestView>{
   final TextEditingController answerController = new TextEditingController();
   @override
   Widget build(BuildContext context) {
-    if (answeredFlag){
+    if (answeredFlag) {
       String message;
-      if (result == 0) message = "正解";
-      else message = "不正解";
+      if (result == 0)
+        message = "正解";
+      else
+        message = "不正解";
       return Column(
         children: <Widget>[
-          Text(message, style: TextStyle(fontSize: 15.0),),
+          Text(
+            message,
+            style: TextStyle(fontSize: 15.0),
+          ),
           Divider(),
           Text("模範解答：${words.word}"),
           Text("あなたの回答：${answerController.text}"),
-          Container(
-            child: Card(
-                child: Text("意味：${words.mean}")
-            )
-          ),
+          Container(child: Card(child: Text("意味：${words.mean}"))),
           RaisedButton(
-            child: Text("Button"),
+            child: Text("次へ"),
+            textColor: Colors.white,
             color: Colors.blue,
             shape: RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(10.0),
             ),
             onPressed: () {
               answeredFlag = false;
-              if (result == 0)answerCount++;
-              else missCount++;
-              setState(() {
-              });
+              if (result == 0)
+                answerCount++;
+              else
+                missCount++;
+              setState(() {});
             },
           )
         ],
       );
-    }
-    else {
-      if (!answeredFlag && result != 2){
+    } else {
+      if (!answeredFlag && result != 2) {
         words = testCore.getWord();
         result = 2;
       }
       if (words.word != "0" || words.mean != "finish this test")
-      return Column(
-        children: <Widget>[
-          Container(
-            width: getWidth() * 0.9,
-            height: getWidth() * 0.7,
-            child: Card(
-              child: Text(words.mean)
-            )
-          ),
-          Divider(),
-          Container(
-            width: getWidth() * 0.7,
-            height: getWidth() * 0.1,
-            child: TextField(
-              controller: answerController,
-              decoration: InputDecoration(
-                labelText: "回答",
-                hintText: "意味に合う単語を入力してください",
-                border: OutlineInputBorder()
+        return Column(
+          children: <Widget>[
+            Container(
+                width: getWidth() * 0.9,
+                height: getWidth() * 0.7,
+                child: Card(child: Text(words.mean))),
+            Divider(),
+            Container(
+              width: getWidth() * 0.7,
+              height: getWidth() * 0.1,
+              child: TextField(
+                controller: answerController,
+                decoration: InputDecoration(
+                    labelText: "回答",
+                    hintText: "意味に合う単語を入力してください",
+                    border: OutlineInputBorder()),
               ),
             ),
-          ),
-          RaisedButton(
-            child: Text("回答"),
-            color: Colors.orange,
-            textColor: Colors.white,
-            onPressed: () {
-              if (words.word == answerController.text) result = 0;
-              else result = 1;
-              bool cache = false;
-              if (result == 0) cache = true;
-              else cache = false;
-              HoldData.afterAnswer(words, cache);
-              answeredFlag = true;
-              setState(() {
-              });
-            },
-          ),
-        ],
-      );
-      else if (words.word == "404" && words.mean == "you remember all words in words list")
+            RaisedButton(
+              child: Text("回答"),
+              color: Colors.orange,
+              textColor: Colors.white,
+              onPressed: () {
+                if (words.word == answerController.text)
+                  result = 0;
+                else
+                  result = 1;
+                bool cache = false;
+                if (result == 0)
+                  cache = true;
+                else
+                  cache = false;
+                HoldData.afterAnswer(words, cache);
+                answeredFlag = true;
+                setState(() {});
+              },
+            ),
+          ],
+        );
+      else if (words.word == "404" &&
+          words.mean == "you remember all words in words list")
         return AlertDialog(
           title: Text("エラー"),
           content: Text("テストする単語がありません"),
@@ -150,11 +145,12 @@ class _TestViewState extends State<TestView>{
             )
           ],
         );
-      else return AlertDialog(
+      else
+        return AlertDialog(
           title: Text("テスト終了"),
           content: Text("問題数 : ${answerCount + missCount}\n"
-                        "正解数 : $answerCount\n"
-                        "正答率 : ${answerCount * (answerCount + missCount) * 100}%"),
+              "正解数 : $answerCount\n"
+              "正答率 : ${answerCount / (answerCount + missCount) * 100}%"),
           actions: <Widget>[
             FlatButton(
               child: Text("Finish"),
@@ -164,20 +160,21 @@ class _TestViewState extends State<TestView>{
         );
     }
   }
+
   @override
   void initState() {
     super.initState();
   }
-  bool updateManager(){
-    if(!answeredFlag && result != 2){
+
+  bool updateManager() {
+    if (!answeredFlag && result != 2) {
       result = 2;
       return (!answeredFlag && result != 2);
-    }else return false;
+    } else
+      return false;
   }
   // true == 0, false == 1, null == 2
 }
-
-
 
 class TestCore {
   var random = new math.Random();
@@ -185,15 +182,21 @@ class TestCore {
     if (rememberFlag) {
       words = new List<Words>();
       for (var value in wordsList.words) {
-        words.add(new Words(value["word"], value["mean"], value["missCount"], value["correct"], value["memorized"]));
+        words.add(new Words(value["word"], value["mean"], value["missCount"],
+            value["correct"], value["memorized"]));
       }
-    }
-    else {
+    } else {
       words = new List<Words>();
-      for (Words value in wordsList.words) {
-        if (!value.memorized) words.add(value);
+      for (var value in wordsList.words) {
+        if (value is Words) {
+          if (!value.memorized) words.add(value);
+        } else if (!value["memorized"])
+          words.add(new Words(value["words"], value["mean"], value["missCount"],
+              value["correct"], value["memorized"]));
       }
-      if (words.length == 0) words.add(Words("404", "you remember all words in words list", 0, 0, false));
+      if (words.length == 0)
+        words.add(
+            Words("404", "you remember all words in words list", 0, 0, false));
     }
   }
   List<Words> words;

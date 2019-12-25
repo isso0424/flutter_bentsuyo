@@ -3,10 +3,12 @@ import '../tools/tool.dart';
 import 'words.dart';
 import 'package:flutter/services.dart';
 
-void main(){
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+void main() {
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -26,65 +28,66 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Title(),
-        debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
-        "/w":(BuildContext context) => new WordsListRoot(),
+        "/w": (BuildContext context) => new WordsListRoot(),
       },
     );
   }
 }
 
-class Title extends StatelessWidget{
-  Widget buttonText(String text){
+class Title extends StatelessWidget {
+  Widget buttonText(String text) {
     return Text(
       text,
       style: TextStyle(fontSize: 40),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-
-      ),
+      appBar: AppBar(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text("べんつよアプリ(仮)",
-              style: TextStyle(
-                fontSize: 45
-              ),),
-              Container(
-                child: RaisedButton(
+          children: <Widget>[
+            Text(
+              "べんつよアプリ(仮)",
+              style: TextStyle(fontSize: 45),
+            ),
+            Container(
+              child: RaisedButton(
                 child: buttonText("単語帳"),
                 shape: UnderlineInputBorder(),
                 onPressed: () {
                   Navigator.of(context).pushNamed("/w");
                 },
               ),
-                width: 300.0,
-                height: 100,),
-              SpaceBox.height(20),
-              Container(
-                child: RaisedButton(
+              width: 300.0,
+              height: 100,
+            ),
+            SpaceBox.height(20),
+            Container(
+              child: RaisedButton(
                 child: buttonText("公式まとめ"),
                 shape: UnderlineInputBorder(),
                 onPressed: () {},
               ),
-                width: 300.0,
-                height: 100,
-              ),
-              SpaceBox.height(20),
-              Container(
-                child: RaisedButton(
+              width: 300.0,
+              height: 100,
+            ),
+            SpaceBox.height(20),
+            Container(
+              child: RaisedButton(
                 child: buttonText("共有"),
                 shape: UnderlineInputBorder(),
                 onPressed: () {},
               ),
-                width: 300.0,
-                height: 100,),
-            ],
+              width: 300.0,
+              height: 100,
+            ),
+          ],
         ),
       ),
     );
