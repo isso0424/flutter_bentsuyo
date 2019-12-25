@@ -116,7 +116,6 @@ class TestButton extends StatefulWidget {
 class _TestButtonState extends State<TestButton>{
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return RaisedButton(
       child: Text("テストする"),
       onPressed: () => Navigator.push(context,
@@ -135,7 +134,6 @@ class TestButtonDontMemorized extends StatefulWidget{
 class _TestButtonDontMemorizedState extends State<TestButtonDontMemorized> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return RaisedButton(
       child: Text("テストする"),
       onPressed: (){
