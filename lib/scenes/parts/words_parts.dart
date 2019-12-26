@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bentsuyo_app/tools/data.dart';
 import '../words.dart';
+import 'package:bentsuyo_app/scenes/words_test.dart';
 
 class _WordsListAddState extends State<WordsListAdd> {
   toLeft(widget) => Tools.toLeft(widget);
@@ -101,7 +102,7 @@ class _WordsListListState extends State<WordsListList> {
     );
   }
 
-  static Future getData(String key) async {
+  Future getData(String key) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var j = pref.getString("json");
     var jsonArray = json.decode(j);
@@ -487,5 +488,49 @@ class _WordsAddState extends State<WordsAdd> {
             padding: EdgeInsets.all(10.0),
           ),
         ));
+  }
+}
+
+class TestButton extends StatefulWidget {
+  @override
+  _TestButtonState createState() => _TestButtonState();
+}
+
+class _TestButtonState extends State<TestButton> {
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+        child: Text("テストする"),
+        color: Colors.blue,
+        textColor: Colors.white,
+        onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                new WordsTestCore(HoldData.wordsListIndex, true))));
+  }
+}
+
+class TestButtonDontMemorized extends StatefulWidget {
+  @override
+  _TestButtonDontMemorizedState createState() =>
+      _TestButtonDontMemorizedState();
+}
+
+class _TestButtonDontMemorizedState extends State<TestButtonDontMemorized> {
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      child: Text("テストする"),
+      color: Colors.blue,
+      textColor: Colors.white,
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                new WordsTestCore(HoldData.wordsListIndex, false)));
+      },
+    );
   }
 }
