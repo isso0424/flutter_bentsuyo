@@ -1,3 +1,4 @@
+import 'package:bentsuyo_app/scenes/parts/words_parts.dart';
 import 'package:bentsuyo_app/tools/data.dart';
 import 'package:bentsuyo_app/tools/types.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,10 @@ class WordsTestCore extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
-        body: Container(child: TestView(_index, rememberFlag)));
+        body: Container(
+            child: TestView(_index, rememberFlag)
+        )
+    );
   }
 }
 
@@ -62,14 +66,7 @@ class _TestViewState extends State<TestView> {
         message = "不正解";
       return Column(
         children: <Widget>[
-          Text(
-            message,
-            style: TextStyle(fontSize: 15.0),
-          ),
-          Divider(),
-          Text("模範解答：${words.word}"),
-          Text("あなたの回答：${answerController.text}"),
-          Container(child: Card(child: Text("意味：${words.mean}"))),
+          WordsAnswerView(words: words, text: answerController.text, message: message,),
           RaisedButton(
             child: Text("次へ"),
             textColor: Colors.white,

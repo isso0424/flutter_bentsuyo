@@ -10,10 +10,18 @@ class HoldData {
   static WordsList wordsList;
   static Words word;
   static int wordIndex;
+  static int formulaIndex;
+  static List<dynamic> formulasList;
+  static Formula formula;
   static final tags = ["word", "mean", "correct", "missCount", "memorized"];
   static void saveWordsList() async {
     var json = jsonEncode(wordsListList);
     _save("json", json);
+  }
+
+  static void saveFormulasList() async {
+    var json = jsonEncode(formulasList);
+    _save("formulas", json);
   }
 
   static void _save(String key, String json) async {
@@ -25,6 +33,12 @@ class HoldData {
     wordsList.words.removeAt(wordIndex);
     wordsListList[HoldData.wordsListIndex] = HoldData.wordsList;
     saveWordsList();
+  }
+
+  static void addNewFormula(String formula, String name, String subject) async {
+    Formula newFormula = new Formula(formula, name, subject);
+    formulasList.add(newFormula);
+    saveFormulasList();
   }
 
   static void makeNewWordsList(String title, String tag, List<String> words) {
@@ -50,6 +64,16 @@ class HoldData {
   static void _saveWordsListToListList() {
     wordsListList[wordsListIndex] = wordsList;
     saveWordsList();
+  }
+
+  static void loadFormula(int index){
+    formula = formulasList[index];
+  }
+
+  static void deleteFormula(){
+    formulasList.remove(formula);
+    formula = null;
+    saveFormulasList();
   }
 
   static void afterAnswer(Words words, bool result) {

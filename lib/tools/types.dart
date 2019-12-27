@@ -31,3 +31,15 @@ class WordsList {
         words = json['words'];
   Map<String, dynamic> toJson() => {'title': title, 'tag': tag, 'words': words};
 }
+
+class Formula {
+  final String formula;
+  final String name;
+  final String subject;
+  Formula(this.formula, this.name, this.subject);
+  Formula.fromJson(Map<String, String> json)
+      : formula = json["formula"],
+        name = json["json"],
+        subject = json["subject"];
+  Map<String, String> toJson() => {'formula': formula, 'name': name, 'subject': subject};
+}

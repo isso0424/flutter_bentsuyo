@@ -534,3 +534,35 @@ class _TestButtonDontMemorizedState extends State<TestButtonDontMemorized> {
     );
   }
 }
+
+// ignore: must_be_immutable
+class WordsAnswerView extends StatefulWidget {
+  WordsAnswerView({this.words, this.text, this.message});
+  Words words;
+  String text;
+  String message;
+  @override
+  State<StatefulWidget> createState() => new _WordsAnswerViewState(words: words, text: text, message: message, );
+}
+
+class _WordsAnswerViewState extends State<WordsAnswerView>{
+  _WordsAnswerViewState({this.words, this.text, this.message});
+  Words words;
+  String text;
+  String message;
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Column(
+      children: <Widget>[
+      Text(
+      message,
+      style: TextStyle(fontSize: 15.0),
+    ),
+    Divider(),
+    Text("模範解答：${words.word}"),
+    Text("あなたの回答：$text,"),
+    Container(child: Card(child: Text("意味：${words.mean}")))
+    ]);
+  }
+}
