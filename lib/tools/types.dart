@@ -37,9 +37,9 @@ class Formula {
   final String name;
   final String subject;
   Formula(this.formula, this.name, this.subject);
-  Formula.fromJson(Map<String, String> json)
-      : formula = json["formula"],
-        name = json["json"],
-        subject = json["subject"];
+  Formula.fromJson(Map<String, dynamic> json)
+      : formula = json['formula'],
+        name = json['name'],
+        subject = json['subject'];
   Map<String, String> toJson() => {'formula': formula, 'name': name, 'subject': subject};
 }

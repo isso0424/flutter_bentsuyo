@@ -11,7 +11,7 @@ class HoldData {
   static Words word;
   static int wordIndex;
   static int formulaIndex;
-  static List<dynamic> formulasList;
+  static List<dynamic> formulasList = [];
   static Formula formula;
   static final tags = ["word", "mean", "correct", "missCount", "memorized"];
   static void saveWordsList() async {
@@ -36,8 +36,8 @@ class HoldData {
   }
 
   static void addNewFormula(String formula, String name, String subject) async {
-    Formula newFormula = new Formula(formula, name, subject);
-    formulasList.add(newFormula);
+    if (formulasList.length == 0) formulasList = [new Formula(formula, name, subject)];
+    else formulasList.add(new Formula(formula, name, subject));
     saveFormulasList();
   }
 
@@ -71,7 +71,12 @@ class HoldData {
   }
 
   static void deleteFormula(){
-    formulasList.remove(formula);
+    int index = 0;
+    for (Formula f in formulasList){
+      if (f.formula == formula.formula) break;
+      index++;
+    }
+    formulasList.removeAt(index);
     formula = null;
     saveFormulasList();
   }

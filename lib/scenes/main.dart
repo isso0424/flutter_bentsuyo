@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../tools/tool.dart';
 import 'words.dart';
 import 'package:flutter/services.dart';
+import 'package:bentsuyo_app/scenes/Formula.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations(
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
         "/w": (BuildContext context) => new WordsListRoot(),
+        "/f": (BuildContext context) => new FormulaListRoot()
       },
     );
   }
@@ -72,7 +74,9 @@ class Title extends StatelessWidget {
               child: RaisedButton(
                 child: buttonText("公式まとめ"),
                 shape: UnderlineInputBorder(),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed("/f");
+                },
               ),
               width: 300.0,
               height: 100,

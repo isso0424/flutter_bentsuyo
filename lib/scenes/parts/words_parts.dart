@@ -542,7 +542,11 @@ class WordsAnswerView extends StatefulWidget {
   String text;
   String message;
   @override
-  State<StatefulWidget> createState() => new _WordsAnswerViewState(words: words, text: text, message: message, );
+  State<StatefulWidget> createState() =>
+      new _WordsAnswerViewState(
+        words: words,
+        text: text,
+        message: message, );
 }
 
 class _WordsAnswerViewState extends State<WordsAnswerView>{

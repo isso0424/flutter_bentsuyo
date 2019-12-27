@@ -75,8 +75,11 @@ class _FormulasListListState extends State<FormulasListList>{
   Future getData(String key) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     var j = pref.getString("formulas");
-    var jsonArray = json.decode(j);
-    /*
+    if (j == null)HoldData.formulasList = [];
+    else {
+      var jsonArray = json.decode(j);
+      print(jsonArray);
+      /*
     var a = [[
       {"title":"単語帳",
         "tag": "たぐ",
@@ -85,8 +88,10 @@ class _FormulasListListState extends State<FormulasListList>{
         ]
       },
     ];*/
-    HoldData.formulasList =
-        jsonArray.map((i) => new Formula.fromJson(i)).toList();
+      HoldData.formulasList =
+          jsonArray.map((i) => new Formula.fromJson(i)).toList();
+      print("ou");
+    }
     return ListView.builder(
         itemCount: HoldData.formulasList.length,
         itemBuilder: (context, int index) {
@@ -198,7 +203,9 @@ class _FormulasListAddState extends State<FormulasListAdd>{
               borderRadius: new BorderRadius.circular(10.0),
             ),
             onPressed: () {
-              if (formulaController.text != "" || subjectController.text != "" || nameController.text != "") return;
+              print("hey");
+              if (formulaController.text == "" || subjectController.text == "" || nameController.text == "") return;
+              print("hi");
               HoldData.addNewFormula(formulaController.text, nameController.text, subjectController.text);
               Navigator.pop(context);
             },
@@ -235,9 +242,13 @@ class _FormulaDetailViewState extends State<FormulaDetailView> {
           Divider(),
           SizedBox(
             child: Card(
-              child: Flexible(
-                child: Text(formula.formula)
-              ),
+              child:Flex(
+              children: <Widget>[Flexible(
+                child: Text(formula.formula,
+                style: TextStyle(fontSize: 25),)
+              ),],
+                direction: Axis.horizontal,
+                mainAxisAlignment: MainAxisAlignment.start,)
             ),
             width: Tools.getWidth(context) * 0.9,
             height: Tools.getHeight(context) * 0.5,
