@@ -92,15 +92,10 @@ class HoldData {
       index++;
     }
     print("correct$index");
-    if (result)
-      words.correct += 1;
-    else
-      words.missCount += 1;
-    if (words.correct > words.missCount)
-      words.memorized = true;
-    else
-      words.memorized = false;
-    print(wordsList.words[0]);
+    if (result) words.correct += 1;
+    else words.missCount += 1;
+    if (words.correct > words.missCount) words.memorized = true;
+    else words.memorized = false;
     wordsList.words[index] = words;
     _saveWordsListToListList();
   }

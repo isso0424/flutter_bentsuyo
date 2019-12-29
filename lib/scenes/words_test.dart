@@ -177,31 +177,31 @@ class TestCore {
   var random = new math.Random();
   TestCore(WordsList wordsList, bool rememberFlag) {
     if (rememberFlag) {
-      words = new List<Words>();
+      _words = new List<Words>();
       for (var value in wordsList.words) {
-        words.add(new Words(value["word"], value["mean"], value["missCount"],
+        _words.add(new Words(value["word"], value["mean"], value["missCount"],
             value["correct"], value["memorized"]));
       }
     } else {
-      words = new List<Words>();
+      _words = new List<Words>();
       for (var value in wordsList.words) {
         if (value is Words) {
-          if (!value.memorized) words.add(value);
+          if (!value.memorized) _words.add(value);
         } else if (!value["memorized"])
-          words.add(new Words(value["words"], value["mean"], value["missCount"],
+          _words.add(new Words(value["word"], value["mean"], value["missCount"],
               value["correct"], value["memorized"]));
       }
-      if (words.length == 0)
-        words.add(
+      if (_words.length == 0)
+        _words.add(
             Words("404", "you remember all words in words list", 0, 0, false));
     }
   }
-  List<Words> words;
+  List<Words> _words;
   Words getWord() {
-    if (words.length == 0) return Words("0", "finish this test", 0, 0, false);
-    int index = random.nextInt(words.length);
-    Words word = words[index];
-    words.removeAt(index);
+    if (_words.length == 0) return Words("0", "finish this test", 0, 0, false);
+    int index = random.nextInt(_words.length);
+    Words word = _words[index];
+    _words.removeAt(index);
     return word;
   }
 }
