@@ -10,6 +10,29 @@ class FormulaListRoot extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(
+              child: Text("べんつよあぷり",
+                  style: TextStyle(fontSize: 30, color: Colors.white)),
+              decoration: BoxDecoration(color: Colors.blue),
+            ),
+            ListTile(
+              title: Text("たんごちょう"),
+              onTap: (){
+                Navigator.of(context).pushReplacementNamed("/w");
+              },
+            ),
+            ListTile(
+              title: Text("こうしき"),
+              onTap: (){
+                Navigator.of(context).pushReplacementNamed("/f");
+              },
+            ),
+          ],
+        ),
+      ),
       body: Stack(
         children: <Widget>[
           Align(
@@ -145,6 +168,29 @@ class _FormulasListAddState extends State<FormulasListAdd>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(
+              child: Text("べんつよあぷり",
+                  style: TextStyle(fontSize: 30, color: Colors.white)),
+              decoration: BoxDecoration(color: Colors.blue),
+            ),
+            ListTile(
+              title: Text("たんごちょう"),
+              onTap: (){
+                Navigator.of(context).pushReplacementNamed("/w");
+              },
+            ),
+            ListTile(
+              title: Text("こうしき"),
+              onTap: (){
+                Navigator.of(context).pushReplacementNamed("/f");
+              },
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: <Widget>[
           toLeft(Text("公式の追加")),
@@ -229,6 +275,29 @@ class _FormulaDetailViewState extends State<FormulaDetailView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(
+              child: Text("べんつよあぷり",
+                  style: TextStyle(fontSize: 30, color: Colors.white)),
+              decoration: BoxDecoration(color: Colors.blue),
+            ),
+            ListTile(
+              title: Text("たんごちょう"),
+              onTap: (){
+                Navigator.of(context).pushReplacementNamed("/w");
+              },
+            ),
+            ListTile(
+              title: Text("こうしき"),
+              onTap: (){
+                Navigator.of(context).pushReplacementNamed("/f");
+              },
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: <Widget>[
           toLeft(

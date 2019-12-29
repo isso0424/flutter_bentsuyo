@@ -99,4 +99,10 @@ class HoldData {
     wordsList.words[index] = words;
     _saveWordsListToListList();
   }
+
+  static void deleteWordsList(){
+    wordsListList.removeAt(wordsListIndex);
+    wordsList = null;
+    saveWordsList();
+  }
 }

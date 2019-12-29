@@ -10,6 +10,29 @@ class WordsListRoot extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(
+              child: Text("べんつよあぷり",
+                  style: TextStyle(fontSize: 30, color: Colors.white)),
+              decoration: BoxDecoration(color: Colors.blue),
+            ),
+            ListTile(
+              title: Text("たんごちょう"),
+              onTap: (){
+                Navigator.of(context).pushReplacementNamed("/w");
+              },
+            ),
+            ListTile(
+              title: Text("こうしき"),
+              onTap: (){
+                Navigator.of(context).pushReplacementNamed("/f");
+              },
+            ),
+          ],
+        ),
+      ),
       body: Stack(
         children: <Widget>[
           Align(
@@ -55,7 +78,40 @@ class WordsListViewRoot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.remove),
+              onPressed: () {
+                HoldData.deleteWordsList();
+                Navigator.pop(context);
+              },
+            )
+          ],
+        ),
+        drawer: Drawer(
+          child: ListView(
+            children: <Widget>[
+              DrawerHeader(
+                child: Text("べんつよあぷり",
+                    style: TextStyle(fontSize: 30, color: Colors.white)),
+                decoration: BoxDecoration(color: Colors.blue),
+              ),
+              ListTile(
+                title: Text("たんごちょう"),
+                onTap: (){
+                  Navigator.of(context).pushReplacementNamed("/w");
+                },
+              ),
+              ListTile(
+                title: Text("こうしき"),
+                onTap: (){
+                  Navigator.of(context).pushReplacementNamed("/f");
+                },
+              ),
+            ],
+          ),
+        ),
         body: Column(
           children: <Widget>[
             WordsListTitle(),
@@ -97,6 +153,29 @@ class DetailViewRoot extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(
+              child: Text("べんつよあぷり",
+                  style: TextStyle(fontSize: 30, color: Colors.white)),
+              decoration: BoxDecoration(color: Colors.blue),
+            ),
+            ListTile(
+              title: Text("たんごちょう"),
+              onTap: (){
+                Navigator.of(context).pushReplacementNamed("/w");
+              },
+            ),
+            ListTile(
+              title: Text("こうしき"),
+              onTap: (){
+                Navigator.of(context).pushReplacementNamed("/f");
+              },
+            ),
+          ],
+        ),
+      ),
       body: Scaffold(
         body: Padding(
           child: Column(
