@@ -433,8 +433,9 @@ class _WordsAddState extends State<WordsAdd> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
-        body: Scaffold(
-          body: Padding(
+        body: ListView(
+
+          children:[ Padding(
             child: Column(
               children: <Widget>[
                 toLeft(Text(
@@ -487,7 +488,7 @@ class _WordsAddState extends State<WordsAdd> {
             ),
             padding: EdgeInsets.all(10.0),
           ),
-        ));
+        ]));
   }
 }
 
