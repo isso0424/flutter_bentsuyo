@@ -105,4 +105,20 @@ class HoldData {
     wordsList = null;
     saveWordsList();
   }
+  static void load(bool loadFormulas) async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (loadFormulas){
+      String formulasListCache = pref.getString("formulas");
+      if (formulasListCache == null) HoldData.formulasList = [];
+      else {
+        var formulasArray = json.decode(formulasListCache);
+        HoldData.formulasList = formulasArray.map((i) => new Formula.fromJson(i));
+      }
+    }
+    else {
+      String wordsListCache = pref.getString("json");
+      var wordsArray = json.decode(wordsListCache);
+      HoldData.wordsListList = wordsArray.map((i) => new WordsList.fromJson(i));
+    }
+  }
 }

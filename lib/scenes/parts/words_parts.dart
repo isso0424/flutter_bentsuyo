@@ -157,6 +157,11 @@ class _WordsListListState extends State<WordsListList> {
           );
         });
   }
+  @override
+  void initState() {
+    super.initState();
+    HoldData.load(true);
+  }
 }
 
 class WordsListTitle extends StatefulWidget {
@@ -557,7 +562,6 @@ class _WordsAnswerViewState extends State<WordsAnswerView>{
   String message;
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Column(
       children: <Widget>[
       Text(
