@@ -45,28 +45,30 @@ class _TestViewState extends State<TestView> {
     words = testCore.getWord();
     result = 2;
   }
-  int _index;
-  bool answeredFlag = false;
-  int result;
-  int questions;
   bool rememberFlag = false;
-  TestCore testCore;
+  bool answeredFlag = false;
   int answerCount = 0;
   int missCount = 0;
+  int _index;
+  int questions;
+  int result;
+  TestCore testCore;
+  String _userAnswer = "";
   getWidth() => Tools.getWidth(context);
   Words words;
   final TextEditingController answerController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     if (answeredFlag) {
-      String message;
+      String m;
       if (result == 0)
-        message = "正解";
+        m = "正解";
       else
-        message = "不正解";
+        m = "不正解";
       return Column(
         children: <Widget>[
-          WordsAnswerView(words: words, text: answerController.text, message: message,),
+          WordsAnswerView(words: words, text: _userAnswer, message: m,),
           RaisedButton(
             child: Text("次へ"),
             textColor: Colors.white,
@@ -96,7 +98,10 @@ class _TestViewState extends State<TestView> {
             Container(
                 width: getWidth() * 0.9,
                 height: getWidth() * 0.7,
-                child: Card(child: Text(words.mean))),
+                child: Card(
+                    child: Text(words.mean)
+                    )
+                ),
             Divider(),
             Container(
               width: getWidth() * 0.7,
@@ -118,11 +123,8 @@ class _TestViewState extends State<TestView> {
                   result = 0;
                 else
                   result = 1;
-                bool cache = false;
-                if (result == 0)
-                  cache = true;
-                else
-                  cache = false;
+                _userAnswer = answerController.text;
+                bool cache = result == 0;
                 HoldData.afterAnswer(words, cache);
                 answeredFlag = true;
                 setState(() {});
@@ -130,6 +132,7 @@ class _TestViewState extends State<TestView> {
             ),
           ],
         );
+      // 単語がない単語帳に対するエラー
       else if (words.word == "404" &&
           words.mean == "you remember all words in words list")
         return AlertDialog(
@@ -142,6 +145,7 @@ class _TestViewState extends State<TestView> {
             )
           ],
         );
+      // テスト終了時の処理
       else
         return AlertDialog(
           title: Text("テスト終了"),
@@ -179,8 +183,15 @@ class TestCore {
     if (rememberFlag) {
       _words = new List<Words>();
       for (var value in wordsList.words) {
-        _words.add(new Words(value["word"], value["mean"], value["missCount"],
-            value["correct"], value["memorized"]));
+        _words.add(
+            new Words(
+                word:      value["word"],
+                mean:      value["mean"],
+                missCount: value["missCount"],
+                correct:   value["correct"],
+                memorized: value["memorized"]
+            )
+        );
       }
     } else {
       _words = new List<Words>();
@@ -188,17 +199,36 @@ class TestCore {
         if (value is Words) {
           if (!value.memorized) _words.add(value);
         } else if (!value["memorized"])
-          _words.add(new Words(value["word"], value["mean"], value["missCount"],
-              value["correct"], value["memorized"]));
+          _words.add(
+              new Words(
+                  word:      value["word"],
+                  mean:      value["mean"],
+                  missCount: value["missCount"],
+                  correct:   value["correct"],
+                  memorized: value["memorized"]
+              )
+          );
       }
       if (_words.length == 0)
         _words.add(
-            Words("404", "you remember all words in words list", 0, 0, false));
+            Words(
+                word:      "404",
+                mean:      "you remember all words in words list",
+                missCount: 0,
+                correct:   0,
+                memorized: false
+            )
+        );
     }
   }
   List<Words> _words;
   Words getWord() {
-    if (_words.length == 0) return Words("0", "finish this test", 0, 0, false);
+    if (_words.length == 0) return Words(
+        word:      "0",
+        mean:      "finish this test",
+        missCount: 0,
+        correct: 0,
+        memorized: false);
     int index = random.nextInt(_words.length);
     Words word = _words[index];
     _words.removeAt(index);

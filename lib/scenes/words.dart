@@ -127,7 +127,7 @@ class WordsListViewRoot extends StatelessWidget {
               style: TextStyle(fontSize: 30),
             )),
             ForgetWordsList(),
-            TestButtonDontMemorized()
+            TestButtonForgotWords()
           ],
         ),
         floatingActionButton: FloatingActionButton(

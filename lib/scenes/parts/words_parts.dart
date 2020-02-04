@@ -482,10 +482,16 @@ class _WordsAddState extends State<WordsAdd> {
                       return;
                     }
                     HoldData.wordsList.words
-                        .add(Words(word, mean, 0, 0, false));
+                        .add(Words(
+                        word:      word,
+                        mean:      mean,
+                        missCount: 0,
+                        correct:   0,
+                        memorized: false
+                    ));
                     HoldData.wordsListList[HoldData.wordsListIndex] =
                         HoldData.wordsList;
-                    HoldData.saveWordsList();
+                    HoldData.saveWordsListToLocal();
                     Navigator.pop(context);
                   },
                 ),
@@ -513,17 +519,20 @@ class _TestButtonState extends State<TestButton> {
             context,
             MaterialPageRoute(
                 builder: (BuildContext context) =>
-                new WordsTestCore(HoldData.wordsListIndex, true))));
+                new WordsTestCore(HoldData.wordsListIndex, true)
+            )
+        )
+    );
   }
 }
 
-class TestButtonDontMemorized extends StatefulWidget {
+class TestButtonForgotWords extends StatefulWidget {
   @override
-  _TestButtonDontMemorizedState createState() =>
-      _TestButtonDontMemorizedState();
+  _TestButtonForgotWordsState createState() =>
+      _TestButtonForgotWordsState();
 }
 
-class _TestButtonDontMemorizedState extends State<TestButtonDontMemorized> {
+class _TestButtonForgotWordsState extends State<TestButtonForgotWords> {
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
@@ -552,7 +561,8 @@ class WordsAnswerView extends StatefulWidget {
       new _WordsAnswerViewState(
         words: words,
         text: text,
-        message: message, );
+        message: message,
+      );
 }
 
 class _WordsAnswerViewState extends State<WordsAnswerView>{
@@ -567,11 +577,12 @@ class _WordsAnswerViewState extends State<WordsAnswerView>{
       Text(
       message,
       style: TextStyle(fontSize: 15.0),
-    ),
-    Divider(),
-    Text("模範解答：${words.word}"),
-    Text("あなたの回答：$text,"),
-    Container(child: Card(child: Text("意味：${words.mean}")))
-    ]);
+      ),
+      Divider(),
+      Text("模範解答：${words.word}"),
+      Text("あなたの回答：$text,"),
+      Container(child: Card(child: Text("意味：${words.mean}")))
+      ]
+    );
   }
 }

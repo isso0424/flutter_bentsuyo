@@ -14,17 +14,17 @@ class HoldData {
   static List<dynamic> formulasList = [];
   static Formula formula;
   static final tags = ["word", "mean", "correct", "missCount", "memorized"];
-  static void saveWordsList() async {
+  static void saveWordsListToLocal() async {
     var json = jsonEncode(wordsListList);
-    _save("json", json);
+    _saveToLocal("json", json);
   }
 
-  static void saveFormulasList() async {
+  static void saveFormulasListToLocal() async {
     var json = jsonEncode(formulasList);
-    _save("formulas", json);
+    _saveToLocal("formulas", json);
   }
 
-  static void _save(String key, String json) async {
+  static void _saveToLocal(String key, String json) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString(key, json);
   }
@@ -32,18 +32,18 @@ class HoldData {
   static void removeWord() {
     wordsList.words.removeAt(wordIndex);
     wordsListList[HoldData.wordsListIndex] = HoldData.wordsList;
-    saveWordsList();
+    saveWordsListToLocal();
   }
 
   static void addNewFormula(String formula, String name, String subject) async {
     if (formulasList.length == 0) formulasList = [new Formula(formula, name, subject)];
     else formulasList.add(new Formula(formula, name, subject));
-    saveFormulasList();
+    saveFormulasListToLocal();
   }
 
   static void makeNewWordsList(String title, String tag, List<String> words) {
     wordsListList.add(WordsList(title, tag, []));
-    saveWordsList();
+    saveWordsListToLocal();
   }
 
   static void loadWordsList(int index) {
@@ -53,17 +53,27 @@ class HoldData {
   static void getWord(int index) {
     var value = wordsList.words[index];
     if (value is Words)
-      word = new Words(value.word, value.mean, value.missCount, value.correct,
-          value.memorized);
+      word = new Words(
+          word:      value.word,
+          mean:      value.mean,
+          missCount: value.missCount,
+          correct:   value.correct,
+          memorized: value.memorized
+      );
     else
-      word = new Words(value["word"], value["mean"], value["missCount"],
-          value["correct"], value["memorized"]);
+      word = new Words(
+          word:      value["word"],
+          mean:      value["mean"],
+          missCount: value["missCount"],
+          correct:   value["correct"],
+          memorized: value["memorized"]
+      );
     wordIndex = index;
   }
 
   static void _saveWordsListToListList() {
     wordsListList[wordsListIndex] = wordsList;
-    saveWordsList();
+    saveWordsListToLocal();
   }
 
   static void loadFormula(int index){
@@ -78,19 +88,11 @@ class HoldData {
     }
     formulasList.removeAt(index);
     formula = null;
-    saveFormulasList();
+    saveFormulasListToLocal();
   }
 
   static void afterAnswer(Words words, bool result) {
-    int index = 0;
-    for (var baruxu in wordsList.words) {
-      if (baruxu is Words) {
-        if (baruxu.word == words.word) break;
-      } else {
-        if (baruxu["word"] == words.word) break;
-      }
-      index++;
-    }
+    int index = searchWordFromWordList(words);
     print("correct$index");
     if (result) words.correct += 1;
     else words.missCount += 1;
@@ -103,10 +105,12 @@ class HoldData {
   static void deleteWordsList(){
     wordsListList.removeAt(wordsListIndex);
     wordsList = null;
-    saveWordsList();
+    saveWordsListToLocal();
   }
+
   static void load(bool loadFormulas) async{
     SharedPreferences pref = await SharedPreferences.getInstance();
+
     if (loadFormulas){
       String formulasListCache = pref.getString("formulas");
       if (formulasListCache == null) HoldData.formulasList = [];
@@ -120,5 +124,18 @@ class HoldData {
       var wordsArray = json.decode(wordsListCache);
       HoldData.wordsListList = wordsArray.map((i) => new WordsList.fromJson(i));
     }
+  }
+
+  static int searchWordFromWordList(Words word){
+    int index = 0;
+    for (var w in wordsList.words) {
+      if (w is Words) {
+        if (w.word == word.word) break;
+      } else {
+        if (w["word"] == word.word) break;
+      }
+      index++;
+    }
+    return index;
   }
 }
