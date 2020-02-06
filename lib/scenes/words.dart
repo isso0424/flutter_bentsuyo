@@ -10,29 +10,7 @@ class WordsListRoot extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            DrawerHeader(
-              child: Text("べんつよあぷり",
-                  style: TextStyle(fontSize: 30, color: Colors.white)),
-              decoration: BoxDecoration(color: Colors.blue),
-            ),
-            ListTile(
-              title: Text("たんごちょう"),
-              onTap: (){
-                Navigator.of(context).pushReplacementNamed("/w");
-              },
-            ),
-            ListTile(
-              title: Text("こうしき"),
-              onTap: (){
-                Navigator.of(context).pushReplacementNamed("/f");
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: Tools.drawer(context),
       body: Stack(
         children: <Widget>[
           Align(
@@ -75,6 +53,8 @@ class WordsListViewRoot extends StatelessWidget {
   WordsListViewRoot({this.index});
   int index;
   toLeft(widget) => Tools.toLeft(widget);
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,49 +63,55 @@ class WordsListViewRoot extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.remove),
               onPressed: () {
+                showDialog<bool>(
+                  context: context,
+                  builder: (_){
+                    return AlertDialog(
+                      title: Text("本当に削除していいですか?"),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("No"),
+                          onPressed: () => Navigator.of(context).pop(false),
+                        ),
+                        FlatButton(
+                          child: Text("Yes"),
+                          onPressed: (){
+                            Navigator.of(context).pop(true);
+                            HoldData.deleteWordsList();
+                          },
+                        )
+                      ],
+                    );
+                  }
+                ).then<void>((y){
+                  if (y) Navigator.pop(context);
+                }
+                );
                 HoldData.deleteWordsList();
                 Navigator.pop(context);
               },
             )
           ],
         ),
-        drawer: Drawer(
-          child: ListView(
-            children: <Widget>[
-              DrawerHeader(
-                child: Text("べんつよあぷり",
-                    style: TextStyle(fontSize: 30, color: Colors.white)),
-                decoration: BoxDecoration(color: Colors.blue),
-              ),
-              ListTile(
-                title: Text("たんごちょう"),
-                onTap: (){
-                  Navigator.of(context).pushReplacementNamed("/w");
-                },
-              ),
-              ListTile(
-                title: Text("こうしき"),
-                onTap: (){
-                  Navigator.of(context).pushReplacementNamed("/f");
-                },
-              ),
-            ],
-          ),
-        ),
+        drawer: Tools.drawer(context),
         body: Column(
           children: <Widget>[
             WordsListTitle(),
             Divider(),
-            toLeft(Text(
-              "　単語一覧",
-              style: TextStyle(fontSize: 30),
-            )),
+            toLeft(
+                Text(
+                  "　単語一覧",
+                  style: TextStyle(fontSize: 30),
+                )
+            ),
             WordsListView(),
             TestButton(),
-            toLeft(Text(
-              "　まだわかってない単語",
-              style: TextStyle(fontSize: 30),
-            )),
+            toLeft(
+                Text(
+                  "　まだわかってない単語",
+                  style: TextStyle(fontSize: 30),
+                )
+            ),
             ForgetWordsList(),
             TestButtonForgotWords()
           ],
@@ -142,7 +128,8 @@ class WordsListViewRoot extends StatelessWidget {
                 new MaterialPageRoute(
                     builder: (BuildContext context) => new WordsAdd()));
           },
-        ));
+        )
+    );
   }
 }
 
@@ -153,53 +140,42 @@ class DetailViewRoot extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            DrawerHeader(
-              child: Text("べんつよあぷり",
-                  style: TextStyle(fontSize: 30, color: Colors.white)),
-              decoration: BoxDecoration(color: Colors.blue),
-            ),
-            ListTile(
-              title: Text("たんごちょう"),
-              onTap: (){
-                Navigator.of(context).pushReplacementNamed("/w");
-              },
-            ),
-            ListTile(
-              title: Text("こうしき"),
-              onTap: (){
-                Navigator.of(context).pushReplacementNamed("/f");
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: Tools.drawer(context),
       body: Scaffold(
         body: Padding(
           child: Column(
             children: <Widget>[
+              // タイトル
               toLeft(WordsDetailTitle()),
               Divider(),
+
+              // 意味
               toLeft(Text("意味")),
               WordsDetailMean(),
+
+              // 詳細データ(正答率など)
               toLeft(Text("詳細")),
               WordsDetailDetail(),
-              RaisedButton(
-                child: Text("単語の削除"),
-                color: Colors.red,
-                shape: StadiumBorder(),
-                onPressed: () {
-                  HoldData.removeWord();
-                  Navigator.pop(context);
-                },
-              ),
+
+              // 単語削除ボタン
+              _wordRemoveButton(context)
             ],
           ),
           padding: EdgeInsets.all(20.0),
         ),
       ),
+    );
+  }
+
+  Widget _wordRemoveButton(BuildContext context){
+    return RaisedButton(
+      child: Text("単語の削除"),
+      color: Colors.red,
+      shape: StadiumBorder(),
+      onPressed: () {
+        HoldData.removeWord();
+        Navigator.pop(context);
+      },
     );
   }
 }

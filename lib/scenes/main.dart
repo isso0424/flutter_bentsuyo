@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:bentsuyo_app/scenes/Formula.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(MyApp());

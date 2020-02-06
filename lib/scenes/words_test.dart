@@ -92,49 +92,24 @@ class _TestViewState extends State<TestView> {
         words = testCore.getWord();
         result = 2;
       }
-      if (words.word != "0" || words.mean != "finish this test")
-        return Column(
-          children: <Widget>[
-            Container(
-                width: getWidth() * 0.9,
-                height: getWidth() * 0.7,
-                child: Card(
-                    child: Text(words.mean)
-                    )
-                ),
-            Divider(),
-            Container(
-              width: getWidth() * 0.7,
-              height: getWidth() * 0.1,
-              child: TextField(
-                controller: answerController,
-                decoration: InputDecoration(
-                    labelText: "回答",
-                    hintText: "意味に合う単語を入力してください",
-                    border: OutlineInputBorder()),
-              ),
-            ),
-            RaisedButton(
-              child: Text("回答"),
-              color: Colors.orange,
-              textColor: Colors.white,
-              onPressed: () {
-                if (words.word == answerController.text)
-                  result = 0;
-                else
-                  result = 1;
-                _userAnswer = answerController.text;
-                bool cache = result == 0;
-                HoldData.afterAnswer(words, cache);
-                answeredFlag = true;
-                setState(() {});
-              },
-            ),
+      if (_getError() == "finish this test")
+        return AlertDialog(
+          title: Text("テスト終了"),
+          content: Text(
+              "問題数 : ${answerCount + missCount}\n"
+              "正解数 : $answerCount\n"
+              "正答率 : ${answerCount / (answerCount + missCount) * 100}%"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Finish"),
+              onPressed: () => Navigator.pop(context),
+            )
           ],
         );
+
+
       // 単語がない単語帳に対するエラー
-      else if (words.word == "404" &&
-          words.mean == "you remember all words in words list")
+      else if ("word list don't have any word" == _getError())
         return AlertDialog(
           title: Text("エラー"),
           content: Text("テストする単語がありません"),
@@ -147,16 +122,40 @@ class _TestViewState extends State<TestView> {
         );
       // テスト終了時の処理
       else
-        return AlertDialog(
-          title: Text("テスト終了"),
-          content: Text("問題数 : ${answerCount + missCount}\n"
-              "正解数 : $answerCount\n"
-              "正答率 : ${answerCount / (answerCount + missCount) * 100}%"),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("Finish"),
-              onPressed: () => Navigator.pop(context),
-            )
+        return Column(
+          children: <Widget>[
+            Container(
+                width: getWidth() * 0.9,
+                height: getWidth() * 0.7,
+                child: Card(
+                    child: Text(words.mean)
+                )
+            ),
+            Divider(),
+            Container(
+              width: getWidth() * 0.7,
+              height: getWidth() * 0.1,
+              child: TextField(
+                controller: answerController,
+                decoration: InputDecoration(
+                    labelText: "回答",
+                    hintText: "意味に合う単語を入力してください",
+                    border: OutlineInputBorder()
+                ),
+              ),
+            ),
+            RaisedButton(
+              child: Text("回答"),
+              color: Colors.orange,
+              textColor: Colors.white,
+              onPressed: () {
+                _userAnswer = answerController.text;
+                bool cache = _judgeResult();
+                HoldData.afterAnswer(words, cache);
+                answeredFlag = true;
+                setState(() {});
+              },
+            ),
           ],
         );
     }
@@ -175,6 +174,20 @@ class _TestViewState extends State<TestView> {
       return false;
   }
   // true == 0, false == 1, null == 2
+
+  bool _judgeResult(){
+    result = words.word == answerController.text ? 0 : 1;
+    return words.word == answerController.text;
+  }
+
+  String _getError(){
+    if (words.word == "404" &&
+        words.mean == "you remember all words in words list")
+      return "word list don't have any word";
+    else if (words.word == "0" && words.mean == "finish this test")
+      return "finish this test";
+    else return "";
+  }
 }
 
 class TestCore {

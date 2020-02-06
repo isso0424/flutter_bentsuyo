@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:bentsuyo_app/tools/tool.dart';
 import 'package:bentsuyo_app/tools/types.dart';
@@ -18,44 +20,49 @@ class _WordsListAddState extends State<WordsListAdd> {
       body: Padding(
         child: Column(
           children: <Widget>[
-            toLeft(Text(
-              "単語帳の追加",
-              style: TextStyle(fontSize: 30),
-            )),
-            toLeft(SizedBox(
-              child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "単語帳の名前",
-                  hintText: "単語帳の名前を入力してください",
+            toLeft(
+                Text(
+                  "単語帳の追加",
+                  style: TextStyle(fontSize: 30),
+                )
+            ),
+            toLeft(
+                SizedBox(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "単語帳の名前",
+                      hintText: "単語帳の名前を入力してください",
+                    ),
+                    controller: titleController,
+                  ),
+                  height: 100,
+                  width: Tools.getWidth(context) * 0.85,
+                )
+            ),
+            toLeft(
+                SizedBox(
+                child: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "タグ(1つ)",
+                    hintText: "タグを入力",
+                  ),
+                  controller: tagController,
                 ),
-                controller: titleController,
-              ),
-              height: 100,
-              width: Tools.getWidth(context) * 0.85,
-            )),
-            toLeft(SizedBox(
-              child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "タグ(1つ)",
-                  hintText: "タグを入力",
-                ),
-                controller: tagController,
-              ),
-              height: 100,
-              width: Tools.getWidth(context) * 0.85,
-            )),
+                height: 100,
+                width: Tools.getWidth(context) * 0.85,
+                )
+            ),
             RaisedButton(
               child: Text("追加"),
               shape: UnderlineInputBorder(),
               onPressed: () {
-                String title = titleController.text;
-                String tag = tagController.text;
-                if (title == "" || tag == "") {
+                final input = _getInput();
+                if (input["title"] == "" || input["tag"] == "") {
                   return;
                 }
-                HoldData.makeNewWordsList(title, tag, []);
+                HoldData.makeNewWordsList(input["title"], input["tag"], []);
                 Navigator.pop(context);
               },
             ),
@@ -64,6 +71,13 @@ class _WordsListAddState extends State<WordsListAdd> {
         padding: EdgeInsets.all(20.0),
       ),
     );
+  }
+
+  HashMap _getInput(){
+    final m = HashMap();
+    m["tag"] = tagController.text;
+    m["title"] = titleController.text;
+    return m;
   }
 }
 
@@ -130,17 +144,20 @@ class _WordsListListState extends State<WordsListList> {
                       style: TextStyle(fontSize: 30),
                     )
                   ]),
-                  Row(children: <Widget>[
-                    Text(
-                      "タグ",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Card(
-                        child: Text(
-                      HoldData.wordsListList[index].tag,
-                      style: TextStyle(fontSize: 20),
-                    ))
-                  ])
+                  Row(
+                      children: <Widget>[
+                        Text(
+                          "タグ",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Card(
+                            child: Text(
+                              HoldData.wordsListList[index].tag,
+                              style: TextStyle(fontSize: 20),
+                        )
+                    )
+                      ]
+                  )
                 ],
               ),
             ),
@@ -152,7 +169,9 @@ class _WordsListListState extends State<WordsListList> {
                   new MaterialPageRoute<Null>(
                       builder: (BuildContext context) => WordsListViewRoot(
                             index: index,
-                          )));
+                          )
+                  )
+              );
             },
           );
         });
@@ -559,8 +578,8 @@ class WordsAnswerView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() =>
       new _WordsAnswerViewState(
-        words: words,
-        text: text,
+        words:   words,
+        text:    text,
         message: message,
       );
 }

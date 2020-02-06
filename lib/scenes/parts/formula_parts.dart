@@ -105,29 +105,7 @@ class _FormulasListAddState extends State<FormulasListAdd>{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
-        drawer: Drawer(
-          child: ListView(
-            children: <Widget>[
-              DrawerHeader(
-                child: Text("べんつよあぷり",
-                    style: TextStyle(fontSize: 30, color: Colors.white)),
-                decoration: BoxDecoration(color: Colors.blue),
-              ),
-              ListTile(
-                title: Text("たんごちょう"),
-                onTap: (){
-                  Navigator.of(context).pushReplacementNamed("/w");
-                },
-              ),
-              ListTile(
-                title: Text("こうしき"),
-                onTap: (){
-                  Navigator.of(context).pushReplacementNamed("/f");
-                },
-              ),
-            ],
-          ),
-        ),
+        drawer: Tools.drawer(context),
         body: ListView(children:[
           Column(
             children: <Widget>[
@@ -225,29 +203,7 @@ class _FormulaDetailViewState extends State<FormulaDetailView> {
           )
         ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            DrawerHeader(
-              child: Text("べんつよあぷり",
-                  style: TextStyle(fontSize: 30, color: Colors.white)),
-              decoration: BoxDecoration(color: Colors.blue),
-            ),
-            ListTile(
-              title: Text("たんごちょう"),
-              onTap: (){
-                Navigator.of(context).pushReplacementNamed("/w");
-              },
-            ),
-            ListTile(
-              title: Text("こうしき"),
-              onTap: (){
-                Navigator.of(context).pushReplacementNamed("/f");
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: Tools.drawer(context),
       body: Column(
         children: <Widget>[
           toLeft(
@@ -310,33 +266,12 @@ class FormulaEditBaseState extends State<FormulaEditBase> {
   final TextEditingController formulaController = new TextEditingController();
   final TextEditingController nameController = new TextEditingController();
   final TextEditingController subjectController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
-        drawer: Drawer(
-          child: ListView(
-            children: <Widget>[
-              DrawerHeader(
-                child: Text("べんつよあぷり",
-                    style: TextStyle(fontSize: 30, color: Colors.white)),
-                decoration: BoxDecoration(color: Colors.blue),
-              ),
-              ListTile(
-                title: Text("たんごちょう"),
-                onTap: (){
-                  Navigator.of(context).pushReplacementNamed("/w");
-                },
-              ),
-              ListTile(
-                title: Text("こうしき"),
-                onTap: (){
-                  Navigator.of(context).pushReplacementNamed("/f");
-                },
-              ),
-            ],
-          ),
-        ),
+        drawer: Tools.drawer(context),
         body: ListView(children :[
           Column(
             children: <Widget>[

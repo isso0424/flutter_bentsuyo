@@ -24,4 +24,31 @@ class Tools {
     final Size size = MediaQuery.of(context).size;
     return size.width;
   }
+
+  static Widget drawer(BuildContext context){
+    return Drawer(
+      child: ListView(
+        children: <Widget>[
+          DrawerHeader(
+            child: Text("べんつよあぷり",
+                style: TextStyle(fontSize: 30, color: Colors.white)),
+            decoration: BoxDecoration(color: Colors.blue),
+          ),
+          ListTile(
+            title: Text("たんごちょう"),
+            onTap: (){
+              Navigator.of(context).pushReplacementNamed("/w");
+            },
+          ),
+          ListTile(
+            title: Text("こうしき"),
+            onTap: (){
+              Navigator.of(context).pushReplacementNamed("/f");
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }
+

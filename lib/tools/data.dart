@@ -42,7 +42,11 @@ class HoldData {
   }
 
   static void makeNewWordsList(String title, String tag, List<String> words) {
-    wordsListList.add(WordsList(title, tag, []));
+    try {
+      wordsListList.add(WordsList(title, tag, []));
+    }catch(any){
+      wordsListList = [WordsList(title,tag, [])];
+    }
     saveWordsListToLocal();
   }
 

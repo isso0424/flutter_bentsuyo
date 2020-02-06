@@ -1,34 +1,13 @@
 import 'package:flutter/material.dart';
 import 'parts/formula_parts.dart';
+import 'package:bentsuyo_app/tools/tool.dart';
 
 class FormulaListRoot extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            DrawerHeader(
-              child: Text("べんつよあぷり",
-                  style: TextStyle(fontSize: 30, color: Colors.white)),
-              decoration: BoxDecoration(color: Colors.blue),
-            ),
-            ListTile(
-              title: Text("たんごちょう"),
-              onTap: (){
-                Navigator.of(context).pushReplacementNamed("/w");
-              },
-            ),
-            ListTile(
-              title: Text("こうしき"),
-              onTap: (){
-                Navigator.of(context).pushReplacementNamed("/f");
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: Tools.drawer(context),
       body: Stack(
         children: <Widget>[
           Align(
