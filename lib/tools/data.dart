@@ -43,9 +43,9 @@ class HoldData {
 
   static void makeNewWordsList(String title, String tag, List<String> words) {
     try {
-      wordsListList.add(WordsList(title, tag, []));
+      wordsListList.add(WordsList(title: title, tag: tag, words: []));
     }catch(any){
-      wordsListList = [WordsList(title,tag, [])];
+      wordsListList = [WordsList(title: title,tag: tag, words: [])];
     }
     saveWordsListToLocal();
   }
@@ -141,5 +141,27 @@ class HoldData {
       index++;
     }
     return index;
+  }
+
+  static void loadData(String key) async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var j = pref.getString(key);
+    if (key == "formulas" && j == null){
+      HoldData.formulasList =[];
+      return;
+    }
+    var jsonArray = json.decode(j);
+    /*
+    var a = [
+      {"title":"単語帳",
+        "tag": "たぐ",
+        "words":[
+          {"word":"たんご", "mean": "意味", "missCount":0,"correct":0,"memorized":0},
+        ]
+      },
+    ];*/
+    if (key == "formulas") HoldData.formulasList = jsonArray.map((i) => new Formula.fromJson(i)).toList();
+    else if (key == "wordsListList")HoldData.wordsListList =
+        jsonArray.map((i) => new WordsList.fromJson(i)).toList();
   }
 }

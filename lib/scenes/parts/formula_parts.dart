@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bentsuyo_app/tools/data.dart';
 import 'package:bentsuyo_app/tools/tool.dart';
 import 'package:bentsuyo_app/tools/types.dart';
-import 'dart:convert';
 
 class FormulasListList extends StatefulWidget{
   @override
@@ -30,24 +28,7 @@ class _FormulasListListState extends State<FormulasListList>{
   }
 
   Future getData(String key) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    var j = pref.getString("formulas");
-    if (j == null)HoldData.formulasList = [];
-    else {
-      var jsonArray = json.decode(j);
-      print(jsonArray);
-      /*
-    var a = [[
-      {"title":"単語帳",
-        "tag": "たぐ",
-        "words":[
-          {"word":"たんご", "mean": "意味", "missCount":0,"correct":0,"memorized":0},
-        ]
-      },
-    ];*/
-      HoldData.formulasList =
-          jsonArray.map((i) => new Formula.fromJson(i)).toList();
-    }
+    HoldData.loadData("formulas");
     return ListView.builder(
         itemCount: HoldData.formulasList.length,
         itemBuilder: (context, int index) {

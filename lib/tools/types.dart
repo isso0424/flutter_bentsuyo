@@ -24,7 +24,7 @@ class WordsList {
   final String title;
   final String tag;
   final List<dynamic> words;
-  WordsList(this.title, this.tag, this.words);
+  WordsList({this.title, this.tag, this.words});
   WordsList.fromJson(Map<String, dynamic> json)
       : title = json['title'],
         tag =   json['tag'],

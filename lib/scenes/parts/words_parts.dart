@@ -117,20 +117,7 @@ class _WordsListListState extends State<WordsListList> {
   }
 
   Future getData(String key) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    var j = pref.getString("json");
-    var jsonArray = json.decode(j);
-    /*
-    var a = [[
-      {"title":"単語帳",
-        "tag": "たぐ",
-        "words":[
-          {"word":"たんご", "mean": "意味", "missCount":0,"correct":0,"memorized":0},
-        ]
-      },
-    ];*/
-    HoldData.wordsListList =
-        jsonArray.map((i) => new WordsList.fromJson(i)).toList();
+    HoldData.loadData(key);
     return ListView.builder(
         itemCount: HoldData.wordsListList.length,
         itemBuilder: (context, int index) {
@@ -334,7 +321,8 @@ class _ForgetWordsListState extends State<ForgetWordsList> {
                                   new MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           new DetailViewRoot()));
-                            });
+                            }
+                            );
                       } else
                         return Container();
                     } else if (!HoldData.wordsList.words[index]["memorized"])
