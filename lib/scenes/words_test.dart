@@ -40,7 +40,7 @@ class _TestViewState extends State<TestView> {
   _TestViewState(int index, bool rememberFlag) {
     _index = index;
     this.rememberFlag = rememberFlag;
-    HoldData.loadWordsList(_index);
+    HoldData.wordsList = HoldData.wordsListList[_index];
     testCore = TestCore(HoldData.wordsList, this.rememberFlag);
     words = testCore.getWord();
     result = 2;

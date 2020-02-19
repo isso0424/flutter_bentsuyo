@@ -1,5 +1,4 @@
 import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:bentsuyo_app/tools/tool.dart';
 import 'package:bentsuyo_app/tools/types.dart';
@@ -56,11 +55,19 @@ class _WordsListAddState extends State<WordsListAdd> {
               child: Text("追加"),
               shape: UnderlineInputBorder(),
               onPressed: () {
-                final input = _getInput();
+                final input = _getInputResult();
                 if (input["title"] == "" || input["tag"] == "") {
                   return;
                 }
-                HoldData.makeNewWordsList(input["title"], input["tag"], []);
+
+                // 新しい単語を保存
+                try {
+                  HoldData.wordsListList.add(WordsList(title: input["title"], tag: input["tag"], words: []));
+                }catch(any){
+                  HoldData.wordsListList = [WordsList(title: input["title"],tag: input["tag"], words: [])];
+                }
+                HoldData.saveWordsListToLocal();
+
                 Navigator.pop(context);
               },
             ),
@@ -71,7 +78,7 @@ class _WordsListAddState extends State<WordsListAdd> {
     );
   }
 
-  HashMap _getInput(){
+  HashMap _getInputResult(){
     final m = HashMap();
     m["tag"] = tagController.text;
     m["title"] = titleController.text;
@@ -147,7 +154,7 @@ class _WordsListListState extends State<WordsListList> {
               ),
             ),
             onTap: () {
-              HoldData.loadWordsList(index);
+              HoldData.wordsList = HoldData.wordsListList[index];
               HoldData.wordsListIndex = index;
               Navigator.push(
                   context,

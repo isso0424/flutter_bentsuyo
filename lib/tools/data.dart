@@ -40,16 +40,7 @@ class HoldData {
   }
 
   static void makeNewWordsList(String title, String tag, List<String> words) {
-    try {
-      wordsListList.add(WordsList(title: title, tag: tag, words: []));
-    }catch(any){
-      wordsListList = [WordsList(title: title,tag: tag, words: [])];
-    }
-    saveWordsListToLocal();
-  }
 
-  static void loadWordsList(int index) {
-    wordsList = wordsListList[index];
   }
 
   static void getWord(int index) {
