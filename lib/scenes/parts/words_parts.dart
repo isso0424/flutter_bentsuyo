@@ -3,8 +3,6 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:bentsuyo_app/tools/tool.dart';
 import 'package:bentsuyo_app/tools/types.dart';
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bentsuyo_app/tools/data.dart';
 import '../words.dart';
 import 'package:bentsuyo_app/scenes/words_test.dart';
@@ -117,7 +115,7 @@ class _WordsListListState extends State<WordsListList> {
   }
 
   Future getData(String key) async {
-    HoldData.loadData(key);
+    await HoldData.loadData(key);
     return ListView.builder(
         itemCount: HoldData.wordsListList.length,
         itemBuilder: (context, int index) {
@@ -166,7 +164,7 @@ class _WordsListListState extends State<WordsListList> {
   @override
   void initState() {
     super.initState();
-    HoldData.load(true);
+    HoldData.loadData("formulas");
   }
 }
 
@@ -231,20 +229,8 @@ class _WordsListViewState extends State<WordsListView> {
   }
 
   Future loadWordsList() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    var j = pref.getString("json");
-    var jsonArray = json.decode(j);
-    /*
-    var a = [
-      {"title":"単語帳",
-        "tag": "たぐ",
-        "words":[
-          {"word":"たんご", "mean": "意味", "missCount":0,"correct":0,"memorized":0},
-        ]
-      },
-    ];*/
-    var words = jsonArray.map((i) => new WordsList.fromJson(i)).toList();
-    HoldData.wordsList = words[HoldData.wordsListIndex];
+    await HoldData.loadData("wordListList");
+
     return ListView.builder(
       itemBuilder: (context, int index) {
         if (index == HoldData.wordsList.words.length) {

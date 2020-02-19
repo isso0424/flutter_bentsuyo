@@ -1,11 +1,11 @@
+import 'dart:collection';
+
 import 'package:bentsuyo_app/scenes/words.dart';
 import 'package:bentsuyo_app/tools/types.dart';
 import 'package:flutter/material.dart';
 import 'package:bentsuyo_app/tools/tool.dart';
 import 'dart:core';
 import 'package:bentsuyo_app/tools/data.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class WordsSearchViewRoot extends StatefulWidget{
   @override
@@ -18,6 +18,7 @@ class WordsSearchViewRootState extends State<WordsSearchViewRoot>{
   static bool searchView = false;
   static bool searchWithTag = true;
   toLeft(widget) => Tools.toLeft(widget);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,28 +29,28 @@ class WordsSearchViewRootState extends State<WordsSearchViewRoot>{
   }
 
   static Future search() async{
-    var searchResults = [];
+    var searchResults = HashMap();
+    searchResults["wordsList"] = [];
+    searchResults["index"] = [];
     int index = 0;
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    var j = pref.getString("wordsListList");
-    var jsonArray = json.decode(j);
-    var wordsListList =
-        jsonArray.map((i) => new WordsList.fromJson(i)).toList();
+    await HoldData.loadData("wordsListList");
     if (searchWithTag) {
-      for (var wordsL in wordsListList) {
+      for (var wordsL in HoldData.wordsListList) {
         if (wordsL is WordsList) {
-          if (wordsL.tag == inputKeyWord) searchResults.add([wordsL, index]);
+          if (wordsL.tag == inputKeyWord) {
+            searchResults["wordsList"].add(wordsL);
+            searchResults["index"].add(index);
+          }
         }else{
-          if (wordsL["tag"] == inputKeyWord) searchResults.add(
-              [
-                WordsList(
-                    title: wordsL["title"],
-                    tag:   wordsL["tag"],
-                    words: wordsL["words"]
-                ),
-                index
-              ]
-          );
+          if (wordsL["tag"] == inputKeyWord){
+            searchResults["wordsList"] =
+                  WordsList(
+                      title: wordsL["title"],
+                      tag:   wordsL["tag"],
+                      words: wordsL["words"]
+                  );
+            searchResults["index"] = index;
+          }
         }
         index++;
       }
@@ -87,13 +88,13 @@ class WordsSearchViewRootState extends State<WordsSearchViewRoot>{
             ),
           ),
           onTap: (){
-            HoldData.loadData(searchResults[index][1]);
-            HoldData.wordsListIndex = searchResults[index][1];
+            HoldData.getWordsListIndex(searchResults["index"][index]);
+            HoldData.wordsListIndex = searchResults["index"][index];
             Navigator.push(
               context,
               new MaterialPageRoute<Null>(
                   builder: (BuildContext context) => WordsListViewRoot(
-                    index : searchResults[index][1]
+                    index : searchResults["index"][index]
                   )
               )
             );
@@ -202,6 +203,7 @@ class HitWordsList extends StatefulWidget{
   HitWordsListState createState() => HitWordsListState();
 }
 
+// 単語の検索結果
 class HitWordsListState extends State<HitWordsList>{
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'types.dart';
 
 class HoldData {
@@ -112,24 +110,6 @@ class HoldData {
     saveWordsListToLocal();
   }
 
-  static void load(bool loadFormulas) async{
-    SharedPreferences pref = await SharedPreferences.getInstance();
-
-    if (loadFormulas){
-      String formulasListCache = pref.getString("formulas");
-      if (formulasListCache == null) HoldData.formulasList = [];
-      else {
-        var formulasArray = json.decode(formulasListCache);
-        HoldData.formulasList = formulasArray.map((i) => new Formula.fromJson(i));
-      }
-    }
-    else {
-      String wordsListCache = pref.getString("json");
-      var wordsArray = json.decode(wordsListCache);
-      HoldData.wordsListList = wordsArray.map((i) => new WordsList.fromJson(i));
-    }
-  }
-
   static int searchWordFromWordList(Words word){
     int index = 0;
     for (var w in wordsList.words) {
@@ -143,7 +123,7 @@ class HoldData {
     return index;
   }
 
-  static void loadData(String key) async{
+  static Future loadData(String key) async{
     SharedPreferences pref = await SharedPreferences.getInstance();
     var j = pref.getString(key);
     if (key == "formulas" && j == null){
@@ -163,5 +143,14 @@ class HoldData {
     if (key == "formulas") HoldData.formulasList = jsonArray.map((i) => new Formula.fromJson(i)).toList();
     else if (key == "wordsListList")HoldData.wordsListList =
         jsonArray.map((i) => new WordsList.fromJson(i)).toList();
+  }
+
+  static int getWordsListIndex(WordsList wordsList){
+    int index = 0;
+    for (WordsList w in HoldData.wordsListList){
+      if (w == wordsList) break;
+      index++;
+    }
+    return index;
   }
 }

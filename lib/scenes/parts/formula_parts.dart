@@ -68,7 +68,7 @@ class _FormulasListListState extends State<FormulasListList>{
   @override
   void initState() {
     super.initState();
-    HoldData.load(false);
+    HoldData.loadData("wordsListList");
   }
 }
 
