@@ -1,4 +1,3 @@
-import 'package:bentsuyo_app/scenes/parts/words_parts.dart';
 import 'package:bentsuyo_app/tools/data.dart';
 import 'package:bentsuyo_app/tools/types.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +67,7 @@ class _TestViewState extends State<TestView> {
         m = "不正解";
       return Column(
         children: <Widget>[
-          WordsAnswerView(words: words, text: _userAnswer, message: m,),
+          UserAnswerResult(words: words, text: _userAnswer, message: m,),
           RaisedButton(
             child: Text("次へ"),
             textColor: Colors.white,
@@ -246,5 +245,42 @@ class TestCore {
     Words word = _words[index];
     _words.removeAt(index);
     return word;
+  }
+}
+
+// ignore: must_be_immutable
+class UserAnswerResult extends StatefulWidget {
+  UserAnswerResult({this.words, this.text, this.message});
+  Words words;
+  String text;
+  String message;
+  @override
+  _UserAnswerResultState createState() => new _UserAnswerResultState(
+    words:   words,
+    text:    text,
+    message: message,
+  );
+}
+
+
+class _UserAnswerResultState extends State<UserAnswerResult>{
+  _UserAnswerResultState({this.words, this.text, this.message});
+  Words words;
+  String text;
+  String message;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        children: <Widget>[
+          Text(
+            message,
+            style: TextStyle(fontSize: 15.0),
+          ),
+          Divider(),
+          Text("模範解答：${words.word}"),
+          Text("あなたの回答：$text,"),
+          Container(child: Card(child: Text("意味：${words.mean}")))
+        ]
+    );
   }
 }

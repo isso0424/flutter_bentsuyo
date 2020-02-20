@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../tools/tool.dart';
-import 'words.dart';
+import 'words/root.dart';
 import 'package:flutter/services.dart';
 import 'package:bentsuyo_app/scenes/Formula.dart';
 

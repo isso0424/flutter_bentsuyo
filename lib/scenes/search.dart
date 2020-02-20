@@ -1,11 +1,12 @@
 import 'dart:collection';
-
-import 'package:bentsuyo_app/scenes/words.dart';
-import 'package:bentsuyo_app/tools/types.dart';
-import 'package:flutter/material.dart';
-import 'package:bentsuyo_app/tools/tool.dart';
 import 'dart:core';
+import 'package:flutter/material.dart';
+
+import 'package:bentsuyo_app/tools/types.dart';
+import 'package:bentsuyo_app/tools/tool.dart';
 import 'package:bentsuyo_app/tools/data.dart';
+
+import 'words/list.dart';
 
 class WordsSearchViewRoot extends StatefulWidget{
   @override
