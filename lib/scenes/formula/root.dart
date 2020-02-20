@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'parts/formula_parts.dart';
+import 'list_content.dart';
 import 'package:bentsuyo_app/tools/tool.dart';
 
+import 'add.dart';
+
 class FormulaListRoot extends StatelessWidget{
+  final Widget _appbar = AppBar(title: Text("公式リスト"),);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: _appbar,
       drawer: Tools.drawer(context),
       body: Stack(
         children: <Widget>[
@@ -15,13 +18,9 @@ class FormulaListRoot extends StatelessWidget{
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  "公式リスト",
-                  style: TextStyle(fontSize: 30),
-                ),
                 Divider(),
                 Expanded(
-                  child: FormulasListList(),
+                  child: FormulasList(),
                 )
               ],
             ),
@@ -30,7 +29,7 @@ class FormulaListRoot extends StatelessWidget{
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
-        child: Text(
+        child: const Text(
           "+",
           style: TextStyle(fontSize: 30),
         ),
@@ -38,7 +37,9 @@ class FormulaListRoot extends StatelessWidget{
           Navigator.push(
               context,
               new MaterialPageRoute(
-                  builder: (BuildContext context) => new FormulasListAdd()));
+                  builder: (BuildContext context) => new FormulaAdd()
+              )
+          );
         },
       ),
     );
