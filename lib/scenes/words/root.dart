@@ -130,8 +130,7 @@ class _WordsListListState extends State<WordsListList> {
         );
   }
   @override
-  void initState() async{
+  void initState() {
     super.initState();
-    await HoldData.loadData("formulas");
   }
 }

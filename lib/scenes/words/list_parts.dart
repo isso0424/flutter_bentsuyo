@@ -32,6 +32,7 @@ class _WordsListViewPartsState extends State<WordsListViewParts> {
         if (snapshot.hasData) {
           return snapshot.data;
         } else if (snapshot.hasError) {
+          print(snapshot.error);
           return Text("Error!");
         } else {
           return Container(
@@ -43,11 +44,23 @@ class _WordsListViewPartsState extends State<WordsListViewParts> {
   }
 
   Future loadWordsList() async {
-    await HoldData.loadData("wordListList");
-
+    print("he");
     return ListView.builder(
       itemBuilder: (context, int index) {
+        print(HoldData.wordsList.words[index] is Words);
+        print(HoldData.wordsList.words[index]);
+        if (!(HoldData.wordsList.words[index] is Words))
+          HoldData.wordsList.words[index] =
+              Words(
+                  word: HoldData.wordsList.words[index]["word"],
+                  mean: HoldData.wordsList.words[index]["mean"],
+                  correct: HoldData.wordsList.words[index]["correct"],
+                  missCount: HoldData.wordsList.words[index]["missCount"],
+                  memorized: HoldData.wordsList.words[index]["memorized"]
+              );
+        print(HoldData.wordsList.words[index]);
         if (index == HoldData.wordsList.words.length) {
+          print(HoldData.wordsList.words[index]);
           return GestureDetector(
             child: toLeft(Text(HoldData.wordsList.words[index].word)),
             onTap: () {
@@ -61,7 +74,7 @@ class _WordsListViewPartsState extends State<WordsListViewParts> {
         }
         return Column(children: <Widget>[
           GestureDetector(
-            child: toLeft(Text(HoldData.wordsList.words[index]["word"])),
+            child: toLeft(Text(HoldData.wordsList.words[index].word)),
             onTap: () {
               HoldData.getWord(index);
               Navigator.push(
@@ -98,9 +111,18 @@ class _ForgetWordsListState extends State<ForgetWordsList> {
     // 単語帳完全理解者
     if (notFoundForgotWord) return Text("ないです");
 
-
     return ListView.builder(
       itemBuilder: (context, int index) {
+        if (!(HoldData.wordsList.words[index] is Words))
+          HoldData.wordsList.words[index] =
+              Words(
+                  word: HoldData.wordsList.words[index]["word"],
+                  mean: HoldData.wordsList.words[index]["mean"],
+                  correct: HoldData.wordsList.words[index]["correct"],
+                  missCount: HoldData.wordsList.words[index]["missCount"],
+                  memorized: HoldData.wordsList.words[index]["memorized"]
+              );
+
         // indexが覚えていない単語のものか判定
         if (HoldData.wordsList.words[index].memorized) return Container();
         else return GestureDetector(

@@ -97,9 +97,7 @@ class FormulaEditorState extends State<FormulaEditor> {
             borderRadius: new BorderRadius.circular(10.0),
           ),
           onPressed: () {
-            print("hey");
             if (formulaController.text == "" || subjectController.text == "" || nameController.text == "") return;
-            print("hi");
             HoldData.deleteFormula();
             HoldData.addNewFormula(formulaController.text, nameController.text, subjectController.text);
             Navigator.pushReplacementNamed(context, "/f");

@@ -14,7 +14,7 @@ class HoldData {
   static final tags = ["word", "mean", "correct", "missCount", "memorized"];
   static void saveWordsListToLocal() async {
     var json = jsonEncode(wordsListList);
-    _saveToLocal("json", json);
+    _saveToLocal("wordsListList", json);
   }
 
   static void saveFormulasListToLocal() async {
@@ -86,7 +86,6 @@ class HoldData {
 
   static void afterAnswer(Words words, bool result) {
     int index = searchWordFromWordList(words);
-    print("correct$index");
     if (result) words.correct += 1;
     else words.missCount += 1;
     if (words.correct > words.missCount) words.memorized = true;
@@ -119,6 +118,11 @@ class HoldData {
     var j = pref.getString(key);
     if (key == "formulas" && j == null){
       HoldData.formulasList =[];
+      return;
+    }
+    else if(key == "wordsListList" && j == null){
+      HoldData.wordsListList = [];
+      HoldData.saveWordsListToLocal();
       return;
     }
     var jsonArray = json.decode(j);

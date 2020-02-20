@@ -6,7 +6,7 @@ import 'package:bentsuyo_app/tools/types.dart';
 import 'package:bentsuyo_app/tools/tool.dart';
 import 'package:bentsuyo_app/tools/data.dart';
 
-import 'words/list.dart';
+import '../list.dart';
 
 class WordsSearchViewRoot extends StatefulWidget{
   @override

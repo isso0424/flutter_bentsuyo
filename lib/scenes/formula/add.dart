@@ -77,9 +77,7 @@ class _FormulaAddState extends State<FormulaAdd>{
                   borderRadius: new BorderRadius.circular(10.0),
                 ),
                 onPressed: () {
-                  print("hey");
                   if (formulaController.text == "" || subjectController.text == "" || nameController.text == "") return;
-                  print("hi");
                   HoldData.addNewFormula(formulaController.text, nameController.text, subjectController.text);
                   Navigator.pop(context);
                 },

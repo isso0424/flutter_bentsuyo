@@ -37,26 +37,28 @@ class _WordsInfoInputterState extends State<WordsInfoInputter>{
       children: [
         _textField(),
 
-        RaisedButton(
-          child: Text("追加"),
-          shape: UnderlineInputBorder(),
-          onPressed: () {
-            final input = _getInputResult();
-            if (input["title"] == "" || input["tag"] == "") {
-              return;
-            }
+        [
+          RaisedButton(
+            child: Text("追加"),
+            shape: UnderlineInputBorder(),
+            onPressed: () {
+              final input = _getInputResult();
+              if (input["title"] == "" || input["tag"] == "") {
+                return;
+              }
 
-            // 新しい単語を保存
-            try {
-              HoldData.wordsListList.add(WordsList(title: input["title"], tag: input["tag"], words: []));
-            }catch(any){
-              HoldData.wordsListList = [WordsList(title: input["title"],tag: input["tag"], words: [])];
-            }
-            HoldData.saveWordsListToLocal();
+              // 新しい単語を保存
+              try {
+                HoldData.wordsListList.add(WordsList(title: input["title"], tag: input["tag"], words: []));
+              }catch(any){
+                HoldData.wordsListList = [WordsList(title: input["title"],tag: input["tag"], words: [])];
+              }
+              HoldData.saveWordsListToLocal();
 
-            Navigator.pop(context);
-          },
-        ),
+              Navigator.pop(context);
+            },
+          ),
+        ]
 
       ].expand((widget) => widget).toList(),
     );
