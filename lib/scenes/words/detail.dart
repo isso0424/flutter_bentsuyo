@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:bentsuyo_app/tools/tool.dart';
 import 'package:bentsuyo_app/tools/data.dart';
 
-import '../parts/words_detail.dart';
+import 'detail_parts.dart';
 
 // ignore: must_be_immutable
 class DetailViewRoot extends StatelessWidget {
