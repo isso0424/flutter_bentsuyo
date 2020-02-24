@@ -47,7 +47,7 @@ class _WordsInfoInputterState extends State<WordsInfoInputter>{
                 return;
               }
 
-              // 新しい単語を保存
+              // 新しい単語帳を保存
               try {
                 HoldData.wordsListList.add(WordsList(title: input["title"], tag: input["tag"], words: []));
               }catch(any){

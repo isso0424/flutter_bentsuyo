@@ -5,12 +5,28 @@ import 'package:flutter/material.dart';
 import '../../tools/tool.dart';
 import 'list_add.dart';
 import 'list.dart';
+import 'search/search.dart';
 
 class WordsListRoot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: (){
+
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (BuildContext context) => WordsSearchViewRoot()
+                  )
+              );
+            },
+          ),
+        ],
+      ),
       drawer: Tools.drawer(context),
       body: Stack(
         children: <Widget>[

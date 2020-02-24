@@ -127,6 +127,7 @@ class _WordsSearchWidget extends StatefulWidget{
 
 class _WordsSearchWidgetState extends State<_WordsSearchWidget>{
   toLeft(widget) => Tools.toLeft(widget);
+  getWidth(context) => Tools.getWidth(context);
   bool _searchWithTitle = true;
   final TextEditingController searchKeyWord = TextEditingController();
 
@@ -136,22 +137,34 @@ class _WordsSearchWidgetState extends State<_WordsSearchWidget>{
       children: <Widget>[
         Row(
           children: <Widget>[
-            RadioListTile<bool>(
-              title: const Text("タグ"),
-              groupValue: _searchWithTitle,
-              value: false,
-              onChanged: (bool value){setState(() {_searchWithTitle = value;});},
+            SizedBox(
+              child:
+                RadioListTile<bool>(
+                  title: const Text("タグ"),
+                  groupValue: _searchWithTitle,
+                  value: false,
+                  onChanged: (bool value){setState(() {_searchWithTitle = value;});},
+                ),
+              height: 70,
+              width: getWidth(context) * 0.4,
             ),
+            SizedBox(
+              child:
             RadioListTile<bool>(
               title: const Text("タイトル"),
               groupValue: _searchWithTitle,
               value: true,
               onChanged: (bool value){setState(() {_searchWithTitle = value;});},
+            ),
+              height: 70,
+              width: getWidth(context) * 0.4,
             )
           ],
         ),
         Row(
           children: [
+            SizedBox(
+              child:
             TextField(
               controller: searchKeyWord,
               decoration: InputDecoration(
@@ -159,6 +172,9 @@ class _WordsSearchWidgetState extends State<_WordsSearchWidget>{
                 hintText: "検索",
                 border: OutlineInputBorder(),
               ),
+            ),
+              height: 100,
+              width: getWidth(context) * 0.85
             ),
             IconButton(
               icon: Icon(Icons.search),

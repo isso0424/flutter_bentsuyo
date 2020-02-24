@@ -23,9 +23,25 @@ class Words {
 class WordsList {
   final String title;
   final String tag;
-  final List<dynamic> words;
+  final List<Words> words;
   WordsList({this.title, this.tag, this.words});
   WordsList.fromJson(Map<String, dynamic> json)
+      : title = json['title'],
+        tag =   json['tag'],
+        words = json['words'];
+  Map<String, dynamic> toJson() => {
+    'title': title,
+    'tag':   tag,
+    'words': words
+  };
+}
+
+class RawWordsList {
+  final String title;
+  final String tag;
+  final List<dynamic> words;
+  RawWordsList({this.title, this.tag, this.words});
+  RawWordsList.fromJson(Map<String, dynamic> json)
       : title = json['title'],
         tag =   json['tag'],
         words = json['words'];

@@ -44,7 +44,6 @@ class _WordsListViewPartsState extends State<WordsListViewParts> {
   }
 
   Future loadWordsList() async {
-    print("he");
     return ListView.builder(
       itemBuilder: (context, int index) {
         print(HoldData.wordsList.words[index] is Words);

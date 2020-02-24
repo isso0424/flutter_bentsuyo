@@ -52,7 +52,7 @@ class HoldData {
           missCount: value.missCount,
           correct:   value.correct,
           memorized: value.memorized
-      );
+      );/*
     else
       word = new Words(
           word:      value["word"],
@@ -61,6 +61,7 @@ class HoldData {
           correct:   value["correct"],
           memorized: value["memorized"]
       );
+      */
     wordIndex = index;
   }
 
@@ -105,9 +106,13 @@ class HoldData {
     for (var w in wordsList.words) {
       if (w is Words) {
         if (w.word == word.word) break;
-      } else {
+      }
+      /*
+      else {
         if (w["word"] == word.word) break;
       }
+
+       */
       index++;
     }
     return index;
