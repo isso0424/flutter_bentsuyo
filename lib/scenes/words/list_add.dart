@@ -1,112 +1,90 @@
 import 'package:flutter/material.dart';
-import 'dart:collection';
 
+import 'package:bentsuyo_app/tools/without_static/data.dart';
 import 'package:bentsuyo_app/tools/tool.dart';
-import 'package:bentsuyo_app/tools/data.dart';
 import 'package:bentsuyo_app/tools/types.dart';
 
 // 単語帳追加画面
-class WordsListAdd extends StatelessWidget {
+class WordsListAdd extends StatelessWidget{
+  final _appBar = AppBar(title: Text("単語帳の追加"),);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: _appBar,
+      drawer: Tools.drawer(context),
       body: Padding(
-        child: WordsInfoInputter(),
+        child: WordsListInfoInputter(),
         padding: EdgeInsets.all(20.0),
       ),
     );
   }
 }
 
-class WordsInfoInputter extends StatefulWidget{
+class WordsListInfoInputter extends StatefulWidget{
   @override
-  _WordsInfoInputterState createState() => new _WordsInfoInputterState();
+  _WordsListInfoInputterState createState() => _WordsListInfoInputterState();
 }
 
-
-// 単語帳追加画面のパーツ
-class _WordsInfoInputterState extends State<WordsInfoInputter>{
+class _WordsListInfoInputterState extends State<WordsListInfoInputter>{
   toLeft(widget) => Tools.toLeft(widget);
   final TextEditingController titleController = new TextEditingController();
   final TextEditingController tagController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
-
-      children: [
-        _textField(),
-
-        [
-          RaisedButton(
-            child: Text("追加"),
-            shape: UnderlineInputBorder(),
-            onPressed: () {
-              final input = _getInputResult();
-              if (input["title"] == "" || input["tag"] == "") {
-                return;
-              }
-
-              // 新しい単語帳を保存
-              try {
-                HoldData.wordsListList.add(WordsList(title: input["title"], tag: input["tag"], words: []));
-              }catch(any){
-                HoldData.wordsListList = [WordsList(title: input["title"],tag: input["tag"], words: [])];
-              }
-              HoldData.saveWordsListToLocal();
-
-              Navigator.pop(context);
-            },
-          ),
-        ]
-
-      ].expand((widget) => widget).toList(),
-    );
-  }
-
-  List<Widget> _textField(){
-    return [toLeft(
-        Text(
-          "単語帳の追加",
-          style: TextStyle(fontSize: 30),
-        )
-    ),
-      toLeft(
+      children: <Widget>[
+        toLeft(
+          Text(
+            "単語帳の追加",
+            style: TextStyle(fontSize: 30),
+          )
+        ),
+        toLeft(
           SizedBox(
             child: TextField(
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "単語帳の名前",
-                hintText: "単語帳の名前を入力してください",
+                hintText: "単語帳の名前を入力してください"
               ),
               controller: titleController,
             ),
             height: 100,
             width: Tools.getWidth(context) * 0.85,
           )
-      ),
-      toLeft(
+        ),
+        toLeft(
           SizedBox(
             child: TextField(
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "タグ(1つ)",
-                hintText: "タグを入力",
+                hintText: "タグを入力"
               ),
               controller: tagController,
             ),
             height: 100,
             width: Tools.getWidth(context) * 0.85,
           )
-      ),
-    ];
-  }
-
-  HashMap _getInputResult(){
-    final m = HashMap();
-    m["tag"] = tagController.text;
-    m["title"] = titleController.text;
-    return m;
+        ),
+        RaisedButton(
+          child: Text("追加"),
+          shape: UnderlineInputBorder(),
+          onPressed: () {
+            if (titleController.text.trim() == ""
+                || tagController.text.trim() == "") return;
+            WordsListData.addNewWordsList(
+                WordsList(
+                    title: titleController.text,
+                    tag: tagController.text,
+                    words: []
+                )
+            );
+            Navigator.pop(context);
+          }
+        )
+      ],
+    );
   }
 }
-

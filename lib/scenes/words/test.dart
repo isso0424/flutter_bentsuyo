@@ -1,287 +1,273 @@
-import 'package:bentsuyo_app/tools/data.dart';
-import 'package:bentsuyo_app/tools/types.dart';
 import 'package:flutter/material.dart';
+
+import 'package:bentsuyo_app/tools/without_static/data.dart';
 import 'package:bentsuyo_app/tools/tool.dart';
+import 'package:bentsuyo_app/tools/types.dart';
+
 import 'dart:math' as math;
 
-// ignore: must_be_immutable
-class WordsTestCore extends StatelessWidget {
-  WordsTestCore(int index, bool rememberFlag) {
-    _index = index;
-    this.rememberFlag = rememberFlag;
-  }
-  int _index;
-  bool rememberFlag;
+class WordsTestCore extends StatefulWidget{
+  WordsTestCore({this.wordsList, this.remember, this.index});
+  final WordsList wordsList;
+  final bool remember;
+  final int index;
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(),
-        body: Container(
-            child: TestView(_index, rememberFlag)
-        )
-    );
-  }
+  _WordsTestCoreState createState() =>
+    _WordsTestCoreState(wL: wordsList, remember: remember, index: index);
 }
 
-// ignore: must_be_immutable
-class TestView extends StatefulWidget {
-  TestView(index, rememberFlag) {
-    _index = index;
-    this.rememberFlag = rememberFlag;
-  }
-  int _index;
-  bool rememberFlag;
-  @override
-  _TestViewState createState() => _TestViewState(_index, rememberFlag);
-}
+class _WordsTestCoreState extends State<WordsTestCore>{
+  _WordsTestCoreState({this.wL, this.remember, this.index});
+  WordsList wL;
+  final int index;
+  final bool remember;
 
-class _TestViewState extends State<TestView> {
-  _TestViewState(int index, bool rememberFlag) {
-    _index = index;
-    this.rememberFlag = rememberFlag;
-    HoldData.wordsList = HoldData.wordsListList[_index];
-    testCore = TestCore(HoldData.wordsList, this.rememberFlag);
-    words = testCore.getWord();
-    result = 2;
-  }
-  bool rememberFlag = false;
-  bool answeredFlag = false;
-  int answerCount = 0;
-  int missCount = 0;
-  int _index;
-  int questions;
-  int result;
-  TestCore testCore;
-  String _userAnswer = "";
-  getWidth(context) => Tools.getWidth(context);
-  getHeight(context) => Tools.getHeight(context);
-  Words words;
   final TextEditingController answerController = new TextEditingController();
 
+  int wordNumber = 1;
+  int questionsCount;
+  int correctCount = 0;
+  int wordIndex;
+  String _userAnswer = "";
+  bool checkAnswer = false;
+  bool reloadWord = true;
+  bool result;
+  math.Random random = math.Random();
+  List<Words> wordsList;
+  Words nowWord;
+
+  getWidth(context) => Tools.getWidth(context);
+  getHeight(context) => Tools.getHeight(context);
+
   @override
-  Widget build(BuildContext context) {
-    if (answeredFlag) {
-      String m;
-      if (result == 0)
-        m = "正解";
-      else
-        m = "不正解";
-      return Column(
-        children: <Widget>[
-          UserAnswerResult(words: words, text: _userAnswer, message: m,),
-          RaisedButton(
-            child: Text("次へ"),
-            textColor: Colors.white,
-            color: Colors.blue,
-            shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(10.0),
-            ),
-            onPressed: () {
-              answeredFlag = false;
-              if (result == 0)
-                answerCount++;
-              else
-                missCount++;
-              setState(() {});
-            },
+  Widget build(BuildContext context){
+    return Scaffold(
+      appBar: AppBar(title: Text("$wordNumber / $questionsCount問目"),),
+      body: checkAnswer ? checkAnswerView(context): questionView(context),
+    );
+  }
+
+  Widget questionView(BuildContext context){
+    // 単語が無い単語帳を参照した場合ダイアログを出す
+    if (questionsCount == 0){
+      return AlertDialog(
+        title: Text("単語がありません"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("OK"),
+            onPressed: () => Navigator.of(context).pop(),
           )
         ],
       );
-    } else {
-      if (!answeredFlag && result != 2) {
-        words = testCore.getWord();
-        result = 2;
-      }
-      if (_getError() == "finish this test")
-        return AlertDialog(
-          title: Text("テスト終了"),
-          content: Text(
-              "問題数 : ${answerCount + missCount}\n"
-              "正解数 : $answerCount\n"
-              "正答率 : ${answerCount / (answerCount + missCount) * 100}%"),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("Finish"),
-              onPressed: () => Navigator.pop(context),
-            )
-          ],
-        );
-
-
-      // 単語がない単語帳に対するエラー
-      else if ("word list don't have any word" == _getError())
-        return AlertDialog(
-          title: Text("エラー"),
-          content: Text("テストする単語がありません"),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("OK"),
-              onPressed: () => Navigator.pop(context),
-            )
-          ],
-        );
-      // テスト終了時の処理
-      else
-        return Column(
-          children: <Widget>[
-            Container(
-                width: getWidth(context) * 0.9,
-                height: getHeight(context) * 0.7,
-                child: Card(
-                    child: Text(words.mean)
-                )
-            ),
-            Divider(),
-            Container(
-              width: getWidth() * 0.7,
-              height: getHeight() * 0.1,
-              child: TextField(
-                controller: answerController,
-                decoration: InputDecoration(
-                    labelText: "回答",
-                    hintText: "意味に合う単語を入力してください",
-                    border: OutlineInputBorder()
-                ),
-              ),
-            ),
-            RaisedButton(
-              child: Text("回答"),
-              color: Colors.orange,
-              textColor: Colors.white,
-              onPressed: () {
-                _userAnswer = answerController.text;
-                bool cache = _judgeResult();
-                HoldData.afterAnswer(words, cache);
-                answeredFlag = true;
-                setState(() {});
-              },
-            ),
-          ],
-        );
     }
+
+    // 最後の問題を回答し終えたら結果を出す
+    if (questionsCount + 1 == wordNumber){
+      WordsListData.refreshWordsList(index, wL);
+      return resultView(context);
+    }
+
+    // 単語のロード
+    if (reloadWord) {
+      wordIndex = random.nextInt(wordsList.length);
+      nowWord = wordsList[wordIndex];
+      wordsList.removeAt(wordIndex);
+      int cache = 0;
+      for (Words w in wL.words){
+        if (w == nowWord) break;
+        cache++;
+      }
+      wordIndex = cache;
+      reloadWord = false;
+    }
+    return Column(
+      children: <Widget>[
+        Container(
+          width: getWidth(context) * 0.9,
+          height: getHeight(context) * 0.4,
+          child: Card(
+            child: Text(nowWord.word),
+          ),
+        ),
+        Divider(),
+        Container(
+          width: getWidth(context) * 0.7,
+          height: getHeight(context) * 0.1,
+          child: TextField(
+            controller: answerController,
+            decoration: InputDecoration(
+              labelText: "回答",
+              hintText: "意味に合う単語を入力してください",
+              border: OutlineInputBorder()
+            ),
+          ),
+        ),
+        RaisedButton(
+          child: Text("回答"),
+          color: Colors.orange,
+          textColor: Colors.white,
+          onPressed: (){
+            if (answerController.text.trim() == "") return;
+            _userAnswer = answerController.text;
+            result = nowWord.word ==_userAnswer;
+            checkAnswer = true;
+            if (result) {
+              wL.words[wordIndex].correct++;
+              correctCount++;
+            }
+            else wL.words[wordIndex].missCount++;
+            int c = wL.words[wordIndex].correct;
+            int m = wL.words[wordIndex].missCount;
+            wL.words[wordIndex].memorized = (c / (c + m) > 0.5);
+            setState((){});
+          },
+        )
+      ],
+    );
+  }
+
+  Widget resultView(BuildContext context){
+    return Center(
+      child: AlertDialog(
+        title: Text("テスト終了"),
+        content: Text(
+            "問題数 : $questionsCount\n"
+                "正解数 : $correctCount\n"
+                "正答率 : ${correctCount / questionsCount * 100}"
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Finish"),
+            onPressed: () => Navigator.pop(context),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget checkAnswerView(BuildContext context){
+    reloadWord = true;
+    return Column(
+      children: <Widget>[
+        Text(
+          result ? "正解" : "不正解",
+          style: TextStyle(fontSize: 15),
+        ),
+        Divider(),
+        Text(
+          "模範解答 : ${nowWord.word}"
+          "あなたの回答 $_userAnswer"
+        ),
+        Container(
+          child: Card(
+            child: Text("意味 : ${nowWord.mean}"),
+          ),
+        ),
+        RaisedButton(
+          child: Text("次へ"),
+          textColor: Colors.white,
+          color: Colors.blue,
+          shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(10.0)
+          ),
+          onPressed: (){
+            checkAnswer = false;
+            wordNumber++;
+            setState(() {});
+          },
+        )
+      ],
+    );
   }
 
   @override
   void initState() {
     super.initState();
-  }
-
-  bool updateManager() {
-    if (!answeredFlag && result != 2) {
-      result = 2;
-      return (!answeredFlag && result != 2);
-    } else
-      return false;
-  }
-  // true == 0, false == 1, null == 2
-
-  bool _judgeResult(){
-    result = words.word == answerController.text ? 0 : 1;
-    return words.word == answerController.text;
-  }
-
-  String _getError(){
-    if (words.word == "404" &&
-        words.mean == "you remember all words in words list")
-      return "word list don't have any word";
-    else if (words.word == "0" && words.mean == "finish this test")
-      return "finish this test";
-    else return "";
-  }
-}
-
-class TestCore {
-  var random = new math.Random();
-  TestCore(WordsList wordsList, bool rememberFlag) {
-    if (rememberFlag) {
-      _words = new List<Words>();
-      for (var value in wordsList.words) {
-        _words.add(
-            new Words(
-                word:      value["word"],
-                mean:      value["mean"],
-                missCount: value["missCount"],
-                correct:   value["correct"],
-                memorized: value["memorized"]
-            )
-        );
+    questionsCount = wL.words.length;
+    List<Words> w = new List.from(wL.words);
+    wordsList = [];
+    if (!remember){
+      for (Words word in w){
+        if (!word.memorized) wordsList.add(word);
       }
-    } else {
-      _words = new List<Words>();
-      for (var value in wordsList.words) {
-        if (value is Words) {
-          if (!value.memorized) _words.add(value);
-        } else if (!value["memorized"])
-          _words.add(
-              new Words(
-                  word:      value["word"],
-                  mean:      value["mean"],
-                  missCount: value["missCount"],
-                  correct:   value["correct"],
-                  memorized: value["memorized"]
-              )
-          );
-      }
-      if (_words.length == 0)
-        _words.add(
-            Words(
-                word:      "404",
-                mean:      "you remember all words in words list",
-                missCount: 0,
-                correct:   0,
-                memorized: false
-            )
-        );
     }
+    else wordsList = w;
   }
-  List<Words> _words;
-  Words getWord() {
-    if (_words.length == 0) return Words(
-        word:      "0",
-        mean:      "finish this test",
-        missCount: 0,
-        correct: 0,
-        memorized: false);
-    int index = random.nextInt(_words.length);
-    Words word = _words[index];
-    _words.removeAt(index);
-    return word;
-  }
+
 }
 
-// ignore: must_be_immutable
-class UserAnswerResult extends StatefulWidget {
-  UserAnswerResult({this.words, this.text, this.message});
-  Words words;
-  String text;
-  String message;
+class TestButton extends StatefulWidget{
+  TestButton({this.wordsList, this.index});
+  final WordsList wordsList;
+  final int index;
+
   @override
-  _UserAnswerResultState createState() => new _UserAnswerResultState(
-    words:   words,
-    text:    text,
-    message: message,
+  _TestButtonState createState() => _TestButtonState(
+    wordsList: wordsList,
+    index: index
   );
 }
 
+class _TestButtonState extends State<TestButton>{
+  _TestButtonState({this.wordsList, this.index});
+  final WordsList wordsList;
+  final int index;
 
-class _UserAnswerResultState extends State<UserAnswerResult>{
-  _UserAnswerResultState({this.words, this.text, this.message});
-  Words words;
-  String text;
-  String message;
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: <Widget>[
-          Text(
-            message,
-            style: TextStyle(fontSize: 15.0),
-          ),
-          Divider(),
-          Text("模範解答：${words.word}"),
-          Text("あなたの回答：$text,"),
-          Container(child: Card(child: Text("意味：${words.mean}")))
-        ]
+    return RaisedButton(
+      child: Text("テストする"),
+      color: Colors.blue,
+      textColor: Colors.white,
+      onPressed: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) =>
+              new WordsTestCore(
+                wordsList: wordsList,
+                index: index,
+                remember: true,
+              )
+        )
+      ),
+    );
+  }
+}
+
+class ForgetTestButton extends StatefulWidget{
+  ForgetTestButton({this.wordsList, this.index});
+  final WordsList wordsList;
+  final int index;
+
+  @override
+  _ForgetTestButtonState createState() => _ForgetTestButtonState(
+      wordsList: wordsList,
+      index: index
+  );
+}
+
+class _ForgetTestButtonState extends State<ForgetTestButton>{
+  _ForgetTestButtonState({this.wordsList, this.index});
+  final WordsList wordsList;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      child: Text("テストする"),
+      color: Colors.blue,
+      textColor: Colors.white,
+      onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) =>
+              new WordsTestCore(
+                wordsList: wordsList,
+                index: index,
+                remember: false,
+              )
+          )
+      ),
     );
   }
 }

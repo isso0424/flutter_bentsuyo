@@ -5,7 +5,7 @@ import 'words/root.dart';
  */
 import 'package:flutter/services.dart';
 import 'package:bentsuyo_app/scenes/formula/root.dart';
-import 'words/without_static/root.dart';
+import 'words/root.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

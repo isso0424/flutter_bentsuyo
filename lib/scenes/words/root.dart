@@ -1,13 +1,14 @@
 import 'dart:core';
 
-import 'package:bentsuyo_app/tools/data.dart';
 import 'package:flutter/material.dart';
-import '../../tools/tool.dart';
-import 'list_add.dart';
-import 'list.dart';
-import 'search/search.dart';
+import 'package:bentsuyo_app/tools/tool.dart';
+import 'package:bentsuyo_app/tools/without_static/data.dart';
+import 'package:bentsuyo_app/tools/types.dart';
 
-class WordsListRoot extends StatelessWidget {
+import 'list.dart';
+import 'list_add.dart';
+
+class WordsListRoot extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,13 +17,15 @@ class WordsListRoot extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: (){
-
+              /*
               Navigator.push(
                   context,
                   new MaterialPageRoute(
                       builder: (BuildContext context) => WordsSearchViewRoot()
                   )
               );
+
+               */
             },
           ),
         ],
@@ -54,7 +57,7 @@ class WordsListRoot extends StatelessWidget {
           "+",
           style: TextStyle(fontSize: 30),
         ),
-        onPressed: () {
+        onPressed: (){
           Navigator.push(
               context,
               new MaterialPageRoute(
@@ -67,27 +70,22 @@ class WordsListRoot extends StatelessWidget {
   }
 }
 
-class WordsListList extends StatefulWidget {
+class WordsListList extends StatefulWidget{
   @override
   _WordsListListState createState() => new _WordsListListState();
 }
 
-// WordsList一覧のListView
-class _WordsListListState extends State<WordsListList> {
+class _WordsListListState extends State<WordsListList>{
+  List<WordsList> wordsListList;
   @override
   Widget build(BuildContext context) {
-    /*
-    saveData("json", """
-    [{"title":"単語帳", "tag":"たぐ", "words":[{"word":"たんご", "mean": "意味", "missCount":0,"correct":0,"memorized":false}]}]
-    """);
-    */
     return FutureBuilder(
-      future: getData("wordsListList"),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
+      future: getData(),
+      builder: (BuildContext context, AsyncSnapshot snapshot){
+        if (snapshot.hasData){
           return snapshot.data;
-        } else if (snapshot.hasError) {
-          return Text("Error!");
+        } else if (snapshot.hasError){
+          return Text("Error!\n${snapshot.error}");
         } else {
           return Container(
             child: CircularProgressIndicator(),
@@ -97,56 +95,54 @@ class _WordsListListState extends State<WordsListList> {
     );
   }
 
-  Future getData(String key) async {
-    await HoldData.loadData(key);
+  Future getData() async{
+    print("hey");
+    wordsListList = await WordsListData.loadWordsListList();
+    print("hi");
     return ListView.builder(
-        itemCount: HoldData.wordsListList.length,
-        itemBuilder: (context, int index) {
-          return GestureDetector(
-            child: Card(
-              child: Column(
-                children: <Widget>[
-                  Row(children: <Widget>[
+      itemCount: wordsListList.length,
+      itemBuilder: (context, int index){
+        return GestureDetector(
+          child: Card(
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
                     Text(
-                      HoldData.wordsListList[index].title,
+                      wordsListList[index].title,
                       style: TextStyle(fontSize: 30),
                     )
-                  ]),
-                  Row(
-                      children: <Widget>[
-                        Text(
-                          "タグ",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        Card(
-                            child: Text(
-                              HoldData.wordsListList[index].tag,
-                              style: TextStyle(fontSize: 20),
-                            )
-                        )
-                      ]
-                  )
-                ],
-              ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      "タグ",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Card(
+                      child: Text(
+                        wordsListList[index].tag,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    )
+                  ],
+                )
+              ],
             ),
-            onTap: () {
-              HoldData.wordsList = HoldData.wordsListList[index];
-              HoldData.wordsListIndex = index;
-              Navigator.push(
-                  context,
-                  new MaterialPageRoute<Null>(
-                      builder: (BuildContext context) => WordsListViewRoot(
-                        index: index,
-                      )
-                  )
-              );
-            },
-          );
-        }
+          ),
+          onTap: (){
+            Navigator.of(context).push(
+              new MaterialPageRoute(
+                builder: (BuildContext context) => new WordsListViewRoot(
+                  wordsList: wordsListList[index],
+                  wordsListIndex: index,
+                )
+              )
+            );
+          },
         );
-  }
-  @override
-  void initState() {
-    super.initState();
+      },
+    );
   }
 }
