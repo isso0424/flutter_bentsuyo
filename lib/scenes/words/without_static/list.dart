@@ -6,6 +6,7 @@ import 'package:bentsuyo_app/tools/without_static/data.dart';
 
 import 'words_add.dart';
 import 'detail.dart';
+import 'test.dart';
 
 // ignore: must_be_immutable
 class WordsListViewRoot extends StatelessWidget {
@@ -51,9 +52,10 @@ class WordsListViewRoot extends StatelessWidget {
               ],
             ),
           ),
-          /*
-          TestButton(),
-          */
+          TestButton(
+            wordsList: wordsList,
+            index: wordsListIndex,
+          ),
           toLeft(
             Text(
               " まだ覚えていない単語",
@@ -75,10 +77,10 @@ class WordsListViewRoot extends StatelessWidget {
               ],
             ),
           ),
-          /*
-          TestButtonForgotWords()
-
-           */
+          ForgetTestButton(
+            wordsList: wordsList,
+            index: wordsListIndex,
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(

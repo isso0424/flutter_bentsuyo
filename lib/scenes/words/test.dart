@@ -53,7 +53,8 @@ class _TestViewState extends State<TestView> {
   int result;
   TestCore testCore;
   String _userAnswer = "";
-  getWidth() => Tools.getWidth(context);
+  getWidth(context) => Tools.getWidth(context);
+  getHeight(context) => Tools.getHeight(context);
   Words words;
   final TextEditingController answerController = new TextEditingController();
 
@@ -124,8 +125,8 @@ class _TestViewState extends State<TestView> {
         return Column(
           children: <Widget>[
             Container(
-                width: getWidth() * 0.9,
-                height: getWidth() * 0.7,
+                width: getWidth(context) * 0.9,
+                height: getHeight(context) * 0.7,
                 child: Card(
                     child: Text(words.mean)
                 )
@@ -133,7 +134,7 @@ class _TestViewState extends State<TestView> {
             Divider(),
             Container(
               width: getWidth() * 0.7,
-              height: getWidth() * 0.1,
+              height: getHeight() * 0.1,
               child: TextField(
                 controller: answerController,
                 decoration: InputDecoration(

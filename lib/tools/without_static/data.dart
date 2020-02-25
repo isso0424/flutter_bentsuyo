@@ -96,6 +96,12 @@ class WordsListData {
     print(a);
   }
 
+  static Future refreshWordsList(int wordsListIndex, WordsList wordsList) async{
+    List<WordsList> wordsListList = await loadWordsListList();
+    wordsListList[wordsListIndex] = wordsList;
+    saveToWordsList(wordsListList);
+  }
+
   // 単語帳の追加
   static void addNewWordsList(WordsList wordsList) async{
     List<WordsList> root = await loadWordsListList();
