@@ -197,62 +197,47 @@ class _WordsTestCoreState extends State<WordsTestCore>{
 }
 
 class TestButton extends StatefulWidget{
-  TestButton({this.wordsList, this.index});
-  final WordsList wordsList;
+  TestButton({this.index});
   final int index;
 
   @override
   _TestButtonState createState() => _TestButtonState(
-    wordsList: wordsList,
     index: index
   );
 }
 
 class _TestButtonState extends State<TestButton>{
-  _TestButtonState({this.wordsList, this.index});
-  final WordsList wordsList;
+  _TestButtonState({this.index});
   final int index;
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      child: Text("テストする"),
-      color: Colors.blue,
-      textColor: Colors.white,
-      onPressed: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) =>
-              new WordsTestCore(
-                wordsList: wordsList,
-                index: index,
-                remember: true,
+    return FutureBuilder(
+      future: _reloadButton(),
+      builder: (
+        BuildContext context,
+        AsyncSnapshot snapshot
+      ){
+        if (snapshot.hasData){
+          return snapshot.data;
+        }else if (snapshot.hasError){
+          return
+            Card(
+              child: Text(
+                  "Error Occled!!!\nDetail is this.\n${snapshot.error}"
               )
-        )
-      ),
+            );
+        }else {
+          return Container(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
-}
 
-class ForgetTestButton extends StatefulWidget{
-  ForgetTestButton({this.wordsList, this.index});
-  final WordsList wordsList;
-  final int index;
-
-  @override
-  _ForgetTestButtonState createState() => _ForgetTestButtonState(
-      wordsList: wordsList,
-      index: index
-  );
-}
-
-class _ForgetTestButtonState extends State<ForgetTestButton>{
-  _ForgetTestButtonState({this.wordsList, this.index});
-  final WordsList wordsList;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
+  Future _reloadButton() async{
+    WordsList wordsList = (await WordsListData.loadWordsListList())[index];
     return RaisedButton(
       child: Text("テストする"),
       color: Colors.blue,
@@ -264,10 +249,71 @@ class _ForgetTestButtonState extends State<ForgetTestButton>{
               new WordsTestCore(
                 wordsList: wordsList,
                 index: index,
-                remember: false,
+                remember: true,
               )
           )
       ),
+    );
+  }
+}
+
+class ForgetTestButton extends StatefulWidget{
+  ForgetTestButton({this.index});
+  final int index;
+
+  @override
+  _ForgetTestButtonState createState() => _ForgetTestButtonState(
+      index: index
+  );
+}
+
+class _ForgetTestButtonState extends State<ForgetTestButton>{
+  _ForgetTestButtonState({ this.index});
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _reloadButton(),
+      builder: (
+          BuildContext context,
+          AsyncSnapshot snapshot
+          ){
+        if (snapshot.hasData){
+          return snapshot.data;
+        }else if (snapshot.hasError){
+          return
+            Card(
+                child: Text(
+                    "Error Occled!!!\nDetail is this.\n${snapshot.error}"
+                )
+            );
+        }else {
+          return Container(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+  Future _reloadButton() async {
+    WordsList wordsList = (await WordsListData.loadWordsListList())[index];
+    return RaisedButton(
+      child: Text("テストする"),
+      color: Colors.blue,
+      textColor: Colors.white,
+      onPressed: () =>
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                  new WordsTestCore(
+                    wordsList: wordsList,
+                    index: index,
+                    remember: false,
+                  )
+              )
+          ),
     );
   }
 }

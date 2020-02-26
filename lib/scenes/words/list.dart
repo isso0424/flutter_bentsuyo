@@ -53,7 +53,6 @@ class WordsListViewRoot extends StatelessWidget {
             ),
           ),
           TestButton(
-            wordsList: wordsList,
             index: wordsListIndex,
           ),
           toLeft(
@@ -78,7 +77,6 @@ class WordsListViewRoot extends StatelessWidget {
             ),
           ),
           ForgetTestButton(
-            wordsList: wordsList,
             index: wordsListIndex,
           )
         ],
@@ -155,8 +153,8 @@ class _WordsListViewState extends State<WordsListView> {
   final int wordsListIndex;
   WordsList wordsList;
 
+  getWidth(context) => Tools.getWidth(context);
   toLeft(widget) => Tools.toLeft(widget);
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -188,9 +186,37 @@ class _WordsListViewState extends State<WordsListView> {
         if (index == wordsList.words.length){
           return GestureDetector(
             child: toLeft(
-              Text(
-                  wordsList.words[index].word
-              )
+                Card(
+                  child: SizedBox(
+                    child: Padding(
+                      child: Column(
+                          children:[
+                            toLeft(
+                                Text(
+                                  wordsList.words[index].word,
+                                  style: TextStyle(fontSize: 20.0),
+                                )
+                            ),
+                            Divider(),
+                            Row(
+                              children: <Widget>[
+                                SizedBox(
+                                  width: getWidth(context)*0.05,
+                                ),
+                                Text(
+                                  wordsList.words[index].mean,
+                                  style: TextStyle(fontSize: 10.0),
+                                )
+                              ],
+                            )
+
+                          ]
+                      ),
+                      padding: EdgeInsets.all(5.0),
+                    ),
+                    width: getWidth(context) * 0.85,
+                  ),
+                )
             ),
             onTap: () {
               Navigator.of(context).push(
@@ -210,7 +236,37 @@ class _WordsListViewState extends State<WordsListView> {
           children: <Widget>[
             GestureDetector(
               child: toLeft(
-                Text(wordsList.words[index].word)
+                Card(
+                  child: SizedBox(
+                    child: Padding(
+                      child: Column(
+                          children:[
+                            toLeft(
+                                Text(
+                                  wordsList.words[index].word,
+                                  style: TextStyle(fontSize: 20.0),
+                                )
+                            ),
+                            Divider(),
+                            Row(
+                              children: <Widget>[
+                                SizedBox(
+                                  width: getWidth(context)*0.05,
+                                ),
+                                Text(
+                                  wordsList.words[index].mean,
+                                  style: TextStyle(fontSize: 10.0),
+                                )
+                              ],
+                            )
+
+                          ]
+                      ),
+                      padding: EdgeInsets.all(5.0),
+                    ),
+                    width: getWidth(context) * 0.85,
+                  ),
+                )
               ),
               onTap: (){
                 Navigator.of(context).push(
@@ -247,6 +303,9 @@ class _ForgetWordsListState extends State<ForgetWordsList>{
   final int wordsListIndex;
 
   WordsList wordsList;
+
+  getWidth(context) => Tools.getWidth(context);
+  toLeft(widget) => Tools.toLeft(widget);
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -291,8 +350,36 @@ class _ForgetWordsListState extends State<ForgetWordsList>{
         else if (first){
           first = false;
           return GestureDetector(
-            child: Text(
-              wordsList.words[index].word
+            child: Card(
+              child: SizedBox(
+                child: Padding(
+                  child: Column(
+                      children:[
+                        toLeft(
+                            Text(
+                              wordsList.words[index].word,
+                              style: TextStyle(fontSize: 20.0),
+                            )
+                        ),
+                        Divider(),
+                        Row(
+                          children: <Widget>[
+                            SizedBox(
+                              width: getWidth(context)*0.05,
+                            ),
+                            Text(
+                              wordsList.words[index].mean,
+                              style: TextStyle(fontSize: 10.0),
+                            )
+                          ],
+                        )
+
+                      ]
+                  ),
+                  padding: EdgeInsets.all(5.0),
+                ),
+                width: getWidth(context) * 0.85,
+              ),
             ),
             onTap: (){
               Navigator.of(context).push(
@@ -311,22 +398,52 @@ class _ForgetWordsListState extends State<ForgetWordsList>{
           return Column(
             children: <Widget>[
               Divider(),
-              GestureDetector(
-                child: Text(
-                  wordsList.words[index].word
-                ),
-                onTap: (){
-                  Navigator.of(context).push(
-                    new MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                        new WordDetailRoot(
-                          wordsListIndex: wordsListIndex,
-                          wordIndex:      index,
-                          word:           wordsList.words[index],
-                        )
-                    )
-                  );
-                },
+              toLeft(
+                GestureDetector(
+                  child: Card(
+                    child: SizedBox(
+                      child: Padding(
+                        child: Column(
+                            children:[
+                              toLeft(
+                                  Text(
+                                    wordsList.words[index].word,
+                                    style: TextStyle(fontSize: 20.0),
+                                  )
+                              ),
+                              Divider(),
+                              Row(
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: getWidth(context)*0.05,
+                                  ),
+                                  Text(
+                                    wordsList.words[index].mean,
+                                    style: TextStyle(fontSize: 10.0),
+                                  )
+                                ],
+                              )
+
+                            ]
+                        ),
+                        padding: EdgeInsets.all(5.0),
+                      ),
+                      width: getWidth(context) * 0.85,
+                    ),
+                  ),
+                  onTap: (){
+                    Navigator.of(context).push(
+                      new MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                          new WordDetailRoot(
+                            wordsListIndex: wordsListIndex,
+                            wordIndex:      index,
+                            word:           wordsList.words[index],
+                          )
+                      )
+                    );
+                  },
+                )
               )
             ],
           );
